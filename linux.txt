@@ -1,0 +1,123 @@
+Linux
+criar usuários
+logado como root
+> useradd nomedeusuario 
+criou somente o usuário sem mais nada
+> userdel -f nomedeusuario
+
+
+>useradd joao -m -c "João Silva"
+a opção -m cria a pasta de usuário na home
+
+> passwd joao (cria ou troca a senha)
+> su joao (troca para o usuário joao)
+
+faltou passar o shell que esse usuário vai usar
+> chsh -s /bin/bash joao
+
+remover o usuário, com pastas e configurações:
+> userdel -r -f joao
+
+criar o usuário informando o shell:
+> useradd joao -m -c "Joao Silva" -s /bin/bash
+
+criar um usuário temporário com data limite de acesso:
+> useradd guest -c "Convidado" -m -e 26/06/2022
+
+fazer alterações no usuário:
+> usermod guest -s /bin/bash
+
+forçar a expiração da senha:
+> passwd guest -e
+
+ver os usuários cadastrados no sistema:
+> cat /etc/passwd
+
+Criar um usuário com todas as informações e criando a senha:
+> useradd convidade1 -c "Convidado especial" -s /bin/bash -m -p $(openssl passwd -crypt Senha123)
+
+Criar usuários em batch:
+> cd /
+> mkdir /scripts
+> nano criaruser.sh
+O arquivo:
+#!/bin/bash
+
+echo "Criando usuários do sistema..."
+
+useradd guest10 -c "Usuário convidado" -s /bin/bash -m -p $(openssl passwd -crypt Senha123)
+passwd guest10 -e
+
+useradd guest11 -c "Usuário convidado" -s /bin/bash -m -p $(openssl passwd -crypt Senha123)
+passwd guest11 -e
+
+useradd guest12 -c "Usuário convidado" -s /bin/bash -m -p $(openssl passwd -crypt Senha123)
+passwd guest12 -e
+
+useradd guest13 -c "Usuário convidado" -s /bin/bash -m -p $(openssl passwd -crypt Senha123)
+passwd guest13 -e
+
+echo "Finalizado!"
+
+> ls
+> chmod +x criaruser.sh
+> ls
+> ./criaruser.sh
+> cat /etc/passwd
+
+Ver grupos:
+> cat /etc/group
+
+adicionar usuário num grupo (inclui a mariana nos grupos adm e sudo)
+> usermod -G adm,sudo mariana
+
+criar grupo
+> groupadd GRP_ADM
+
+deletar um grupo (tem que3 estar vazio)
+> groupdel GRP_ADM
+
+criar o usuário e inserir no grupo
+> useradd rodrigo -c "Rodrigo Silva" -m -s /bin/bash -p $(openssl passwd -crypt Senha123) -G GRP_ADM
+
+trocar o usuário de grupo
+> usermod -G GRP_ADM mariana
+
+tirar a usuária mariana do grupo sudo
+>gpasswd -d mariana sudo
+
+PERMISSÕES
+- primeira letra indica se é diretório
+- primeira coluna (dono) - usuário que aparece na primeira coluna após as permissões
+- segunda coluna (grupo) - nome que aparece na segunda coluna após as permissões
+- terceira coluna (outros)
+
+TROCAR DONO E GRUPO
+-- no diretório
+> chow mariana:GRP_VEN /ven/
+
+TROCAR PERMISSÕES
+Leitura(r) = 4
+Gravação (w) = 2
+Execução (x) = 1
+Nenhuma = 0
+
+troca as permissões do diretório para
+dono=total
+grupo= leitura e execução
+outros = nada
+> chmod 750 /adm/
+
+PERMISSÕES DE EXECUÇÃO PARA SCRIPTS
+#!/bin/bash
+echo "exibindo a data atual..."
+date
+
+arquivo date.sh
+por padrão, as permissões vêm sem execução
+> chmod 744 date.sh
+> chmod +x date.sh
+
+
+
+
