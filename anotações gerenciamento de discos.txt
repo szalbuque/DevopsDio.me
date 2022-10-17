@@ -1,0 +1,85 @@
+Sistemas de arquivos
+
+Sist. Operacional	Sist. de arquivos
+MacOS			HFS
+Unix/Linux		Ext3, Ext4, XFS
+Windows			FAT32, NTFS
+
+Partições no Linux:
+sda, sdb, sdc
+disco sda: partições sda1, sda2
+disco sdb: partições sdb1, sdb2
+
+================
+
+Adicionando um novo disco
+
+Ver os discos:
+
+> lsblk
+
+> fdisk -l
+
+parar a vm
+
+no Virtual Box: configurações > armazenamento > controladora sata > criar > VDI > dinamicamente alocado > 50Gb
+
+iniciar a vm
+
+> lsblk
+vai aparecer o disco sdb
+não está formatado
+
+precisa formatar e criar partições
+
+====================
+
+Particionando e formatando discos via terminal
+
+particionando:
+
+> fdisk /dev/sdb
+command: n (nova partição)
+partition type: p (primária)
+first sector: <enter>
+last sector: <enter>
+command: w (salvar)
+
+formatando:
+
+> mkfs.ext4 /dev/sdb
+yes
+
+======================
+
+Montando e desmontando discos
+
+para montar, preciso de um diretório
+já existe o /mnt
+
+> cd /mnt/
+> mkdir disco2
+> mount /dev/sdb /mnt/disco2/
+
+tudo que eu salvar em /mnt/disco2, será gravado naquele disco novo
+
+para desmontar:
+
+> umount /dev/sdb
+
+se o disco estiver montado, tudo que eu salvar ou deletar da pasta, será gravado ou apagado no disco
+
+se o disco estiver desmontado isso não acontece
+
+======================
+
+Montando discos automaticamente (ao ligar a vm ele já estará montado)
+
+> lsblk (mostra os discos e onde estão montados)
+
+> nano /etc/fstab (tabela de discos)
+
+adicionar esta linha:
+
+ /dev/sdb /disk2 ext4 defaults 0 0
+

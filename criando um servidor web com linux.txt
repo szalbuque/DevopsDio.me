@@ -1,0 +1,10 @@
+Criando um servidor web com linux
+
+Instalando o apache
+
+apt install apache2 -y
+
+Acessar pelo navegador o ip do servidor, vai aparecer a página padrão do apache
+
+O arquivo index.html deve ser copiado para /var/www/html
+

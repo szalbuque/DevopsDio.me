@@ -1,0 +1,3 @@
+servidor: ubuntu
+user: ubuntu-user
+pass: 12345

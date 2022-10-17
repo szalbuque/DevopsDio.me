@@ -1,0 +1,12 @@
+script para provisionar um servidor apache com a aplicação
+
+usar o bash script
+
+atualizar o servidor
+instalar o apache
+instalar o unzip
+baixar a aplicação no tmp
+provisionar a aplicação no apache
+
+
+usar o github para fazer o versionamento

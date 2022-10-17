@@ -1,0 +1,20 @@
+Servidor de Banco de Dados
+
+Instalando o MySQL
+
+> apt search mysql-server
+> apt install mysql-server-8.0 -y
+
+testar
+
+mysql -u root -p
+> show databases;
+> create database meubanco;
+> use meubanco;
+> create table Pessoas (PessoaID int, Nome varchar(50), Endereco varchar(100), Cidade varchar(50));
+> show tables;
+> select * FROM pessoas;
+> insert into Pessoas (PessoaID, Nome, Sobrenome, Endereco, Cidade) VALUES (1, 'Carlos', 'da Silva', 'Rua Flores','Cidade Sol');
+> exit
+
+

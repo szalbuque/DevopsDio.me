@@ -37,7 +37,12 @@ dnf update (faz update e upgrade)
 
 ============
 
+<<<<<<< HEAD
 Realizando a instalação de arquivos DEB
+=======
+Realizando a instalação de arquivos DEB (Ubuntu e Debian)
+
+>>>>>>> a76559db365629f11c903c82f4e6a13fab32b50f
 
 
 
