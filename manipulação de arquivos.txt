@@ -1,0 +1,60 @@
+Manipulação de arquivos
+
+Copiando arquivos e manipulando processos
+
+> cp /home/*.txt /disk2/
+
+> cd /home
+> cp ./a* /disk2
+
+perguntando antes de copiar
+> cp -i /home/* /disk2
+
+copiando também os subdiretórios
+> cp -r origem destino
+
+vendo os resultados
+
+> cp -v origem destino
+
+=============================
+
+REnomeando movendo arquivos
+
+> mv origem/arquivo destino (por padrão sobrepõe)
+
+-i interativo
+-v verbose
+
+não tem o modo recursivo
+
+usado também para renomear
+
+> mv nome.txt nome2.txt
+
+======================
+
+Iniciando, visualizando e  encerrando um processo
+
+> ps (mostra os processos chamados deste terminal)
+
+> ps a (todos os usuários)
+
+> ps u (diz o nome do usuário)
+
+> ps x (também de fora do console)
+
+> ps aux
+
+Matar o processo
+
+> kill número do pid do processo
+
+> killall chrome
+
+Ver o id do usuário
+
+> who -a
+> kill id do usuário (fecha a conexão daquele usuário)
+
+

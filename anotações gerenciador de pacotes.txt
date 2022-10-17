@@ -1,0 +1,45 @@
+Ubuntu:
+
+apt-get (mais baixo nível, não muito amigável)
+bom para usar em script
+> update e upgrade em produção: cuidado!
+> crie snapshot antes
+
+
+apt (mais amigável, interaje com o usuário)
+> apt list (disponível para baixar)
+> apt list --installed (instalados)
+> apt list --upgradeable (os instalados podem ser atualizados?)
+> apt search
+> apt show
+> apt remove net-tools -y (remove sem perguntar)
+
+etc/apt/sources-list (links dos repositórios oficiais)
+==========
+
+Atualização do sistema operacional (testar antes)
+
+> fazer um screenshot no Virtual Box
+> apt update (checar repositórios por atualizações)
+> apt upgrade (atualiza o SO)
+==============
+
+Instalação de pacotes no ambiente desktop
+- Ubuntu software
+- terminal
+
+==========
+
+Fedora , Red Hat, CentOS
+
+Red Hat: dnf (user friendly) ou yum (para scripts)
+dnf update (faz update e upgrade)
+
+============
+
+Realizando a instalação de arquivos DEB (Ubuntu e Debian)
+
+
+
+
+
