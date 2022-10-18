@@ -1,7 +1,5 @@
 #!/bin/bash
 
-if [ "$(id -u)" != "0" ]; then echo echo "Voce deve executar este script com poderes de root! " else 
-
 	echo "Atualizando o servidor..."
 	apt update
 	apt upgrade -y
@@ -19,7 +17,6 @@ if [ "$(id -u)" != "0" ]; then echo echo "Voce deve executar este script com pod
 
 	echo "Copiando arquivos para o Apache..."
 	cd linux-site-dio-main
-	cp * /var/www/html/
+	cp -r * /var/www/html/
 
 
-fi
