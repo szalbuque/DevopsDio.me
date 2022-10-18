@@ -10,7 +10,7 @@
 	echo "Instalando o Unzip..."
 	apt install unzip -y
 
-	echo "Clonando a aplicação..."
+	echo "Baixando a aplicação..."
 	cd /tmp/
 	wget https://github.com/denilsonbonatti/linux-site-dio/archive/refs/heads/main.zip
 	unzip main.zip
