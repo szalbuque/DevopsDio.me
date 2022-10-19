@@ -1,0 +1,288 @@
+docker hub
+hello-world
+> docker pull hello-world
+
+Ver a imagem baixada:
+> docker images
+
+Executar a imagem que foi baixada:
+> docker run hello-world
+
+Ver os containers em execução:
+> docker ps
+
+(no exemplo, ele executou e fechou, então não aparece nada)
+
+Ver os containers executados recentemente:
+> docker ps -a
+
+================
+
+baixar a imagem do ubuntu
+
+docker pull ubuntu
+
+docker images
+REPOSITORY    TAG       IMAGE ID       CREATED         SIZE
+ubuntu        latest    216c552ea5ba   2 weeks ago     77.8MB
+hello-world   latest    feb5d9fea6a5   13 months ago   13.3kB
+
+docker run ubuntu (roda e fecha)
+
+docker run ubuntu sleep 10 (executa e fecha depois de 10 segundos)
+
+Para parar a execução do container (entrar em outro terminal):
+docker stop id ou nome
+
+docker run -ti (t: abre um terminal, i: interativo)
+docker run -ti ubuntu
+docker run -ti ubuntu
+root@316287e86297:/# (entrou como root no container)
+
+
+================
+
+Velha sintaxe e nova sintaxe
+
+docker ps = docker container ls
+docker run = docker container run
+
+=====================
+
+Executando aplicações no contêiner
+
+docker run -d (executa em background)
+
+docker exec -dit id ou nome do container /bin/bash
+
+Exemplo:
+root@ubuntu:/home/silviaz# docker run -dti ubuntu
+316be58e467143adeaa9943a91baf8142bc77a5fb954d287b5deba3e0be3d167
+root@ubuntu:/home/silviaz# docker ps
+CONTAINER ID   IMAGE     COMMAND   CREATED         STATUS         PORTS     NAMES
+316be58e4671   ubuntu    "bash"    4 seconds ago   Up 3 seconds             great_poitras
+root@ubuntu:/home/silviaz# docker exec -it great_poitras /bin/bash
+root@316be58e4671:/# 
+
+Para instalar por exemplo o nano:
+
+root@316be58e4671:/# apt update
+root@316be58e4671:/# apt upgrade
+root@316be58e4671:/# apt install nano
+
+Para sair:
+root@316be58e4671:/# exit
+
+Saímos da execução, mas o container continua ativo:
+root@ubuntu:/home/silviaz# docker ps
+CONTAINER ID   IMAGE     COMMAND   CREATED         STATUS         PORTS     NAMES
+316be58e4671   ubuntu    "bash"    4 minutes ago   Up 4 minutes             great_poitras
+
+Ele está atualizado e com o nano instalado.
+
+Também posso mandar executar um comando específico dentro do container, por exemplo:
+root@ubuntu:/home/silviaz# docker exec -it great_poitras cat /etc/*release*
+DISTRIB_ID=Ubuntu
+DISTRIB_RELEASE=22.04
+DISTRIB_CODENAME=jammy
+DISTRIB_DESCRIPTION="Ubuntu 22.04.1 LTS"
+PRETTY_NAME="Ubuntu 22.04.1 LTS"
+NAME="Ubuntu"
+VERSION_ID="22.04"
+VERSION="22.04.1 LTS (Jammy Jellyfish)"
+VERSION_CODENAME=jammy
+ID=ubuntu
+ID_LIKE=debian
+HOME_URL="https://www.ubuntu.com/"
+SUPPORT_URL="https://help.ubuntu.com/"
+BUG_REPORT_URL="https://bugs.launchpad.net/ubuntu/"
+PRIVACY_POLICY_URL="https://www.ubuntu.com/legal/terms-and-policies/privacy-policy"
+UBUNTU_CODENAME=jammy
+root@ubuntu:/home/silviaz# 
+
+docker stop great_poitras (vai parar o container)
+
+=============================
+
+Excluindo e nomeando contêineres
+
+root@ubuntu:/home/silviaz# docker stop great_poitras
+great_poitras
+root@ubuntu:/home/silviaz# docker ps
+CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
+root@ubuntu:/home/silviaz# docker ps -a
+CONTAINER ID   IMAGE         COMMAND    CREATED          STATUS                        PORTS     NAMES
+316be58e4671   ubuntu        "bash"     9 minutes ago    Exited (137) 20 seconds ago             great_poitras
+316287e86297   ubuntu        "bash"     14 minutes ago   Exited (0) 10 minutes ago               nervous_margulis
+a6899f2f6407   hello-world   "/hello"   4 hours ago      Exited (0) 4 hours ago                  pedantic_aryabhata
+
+Esses containeres estão ocupando espaço a toa. Vamos apagar:
+
+docker rm 316be58e4671
+
+Também devo excluir as imagens que não estou mais usando:
+root@ubuntu:/home/silviaz# docker images
+REPOSITORY    TAG       IMAGE ID       CREATED         SIZE
+ubuntu        latest    216c552ea5ba   2 weeks ago     77.8MB
+hello-world   latest    feb5d9fea6a5   13 months ago   13.3kB
+
+root@ubuntu:/home/silviaz# docker rmi hello-world
+Error response from daemon: conflict: unable to remove repository reference "hello-world" (must force) - container a6899f2f6407 is using its referenced image feb5d9fea6a5
+
+Preciso excluir o container primeiro:
+root@ubuntu:/home/silviaz# docker rm a6899f2f6407
+a6899f2f6407
+root@ubuntu:/home/silviaz# docker rmi hello-world
+Untagged: hello-world:latest
+Untagged: hello-world@sha256:18a657d0cc1c7d0678a3fbea8b7eb4918bba25968d3e1b0adebfa71caddbc346
+Deleted: sha256:feb5d9fea6a5e9606aa995e879d862b825965ba48de054caab5ef356dc6b3412
+Deleted: sha256:e07ee1baac5fae6a26f30cabfe54a36d3402f96afda318fe0a96cec4ca393359
+
+--------------
+O docker vai procurar no docker hub a imagem que eu quero, caso ela não esteja na máquina:
+
+root@ubuntu:/home/silviaz# docker run -dti centos
+Unable to find image 'centos:latest' locally
+latest: Pulling from library/centos
+a1d0c7532777: Pull complete
+Digest: sha256:a27fd8080b517143cbbbab9dfb7c8571c40d67d534bbdee55bd6c473f432b177
+Status: Downloaded newer image for centos:latest
+36d8b60972077b42ad9762376f6e36b2c014ff9c5de99e9ba8b7114614bcc2e7
+----------------
+
+Posso dar um nome para o container, para ficar mais fácil de referenciá-lo:
+
+root@ubuntu:/home/silviaz# docker run -dti --name ubuntu-a ubuntu
+97a55fa302e0cac0137b8aa8b509ebb3b643d29f5c113513bee46608a21ca2a6
+
+root@ubuntu:/home/silviaz# docker ps
+CONTAINER ID   IMAGE     COMMAND   CREATED          STATUS          PORTS     NAMES
+97a55fa302e0   ubuntu    "bash"    46 seconds ago   Up 44 seconds             ubuntu-a
+
+================================
+
+Copiando arquivos para o conteiner:
+
+O comando abaixo cria um diretório dentro do container ubuntu-a:
+docker exec ubuntu-a mkdir /destino
+
+O comando abaixo copia o arquivo MeuArquivo.txt para o diretório criado no container:
+docker cp MeuArquivo.txt ubuntu-a:/destino
+
+root@ubuntu:/home/silviaz# docker exec ubuntu-a mkdir /destino
+root@ubuntu:/home/silviaz# ls
+TEMP
+root@ubuntu:/home/silviaz# echo "teste" teste.txt
+teste teste.txt
+root@ubuntu:/home/silviaz# echo "teste" >teste.txt
+root@ubuntu:/home/silviaz# docker cp teste.txt ubuntu-a:/destino
+root@ubuntu:/home/silviaz# docker exec ubuntu-a /bin/bash
+root@ubuntu:/home/silviaz# docker exec -ti ubuntu-a /bin/bash
+root@97a55fa302e0:/# ls
+bin   destino  etc   lib    lib64   media  opt   root  sbin  sys  usr
+boot  dev      home  lib32  libx32  mnt    proc  run   srv   tmp  var
+root@97a55fa302e0:/# cd destino
+root@97a55fa302e0:/destino# ls
+teste.txt
+
+-----------------------------
+Para copiar do container para a máquina local:
+root@ubuntu:/home/silviaz# docker cp ubuntu-a:/destino/teste.txt testecopia.txt
+root@ubuntu:/home/silviaz# ls
+TEMP  teste.txt  testecopia.txt
+
+----------------------
+
+TAGs
+
+Olhar as tags disponíveis no Docker Hub
+exemplo:
+docker pull debian:9
+
+para rodar o container:
+docker run -dti debian:9
+
+=======================
+
+Criando um container do MYSQL
+
+Vai precisar especificar variáveis de ambiente
+
+docker pull mysql
+docker images
+docker run (-p porta, -e variáveis de ambiente)
+-p porta do host:porta do container
+docker run -e MYSQL_ROOT_PASSWORD=Senha123 --name mysql-a -d -p 3306:3306 mysql
+
+Executando os comandos:
+root@ubuntu:/home/silviaz# docker pull mysql
+Using default tag: latest
+latest: Pulling from library/mysql
+5ed150ed0abe: Pull complete
+0fede58e17ac: Pull complete
+994a6ddd6efe: Pull complete
+028bda79779b: Pull complete
+426fbe9e56a2: Pull complete
+1a00e58dd193: Pull complete
+4a4f64494005: Pull complete
+fba8ab3534a7: Pull complete
+2695938edf88: Pull complete
+bd31bed30a0c: Pull complete
+b52042432ab3: Pull complete
+Digest: sha256:12bae50f531fef9dc7726072446cd7c4b461eaa154611659c891a0d9f628684f
+Status: Downloaded newer image for mysql:latest
+docker.io/library/mysql:latest
+root@ubuntu:/home/silviaz# docker images
+REPOSITORY   TAG       IMAGE ID       CREATED       SIZE
+mysql        latest    6cc1a43ad84d   3 hours ago   535MB
+ubuntu       latest    216c552ea5ba   2 weeks ago   77.8MB
+root@ubuntu:/home/silviaz# docker run -e MYSQL_ROOT_PASSWORD=Senha123 --name mysql-a -d -p 3306:3306 mysql
+152ae676024bc77a22fbaa50fc69d01e21526a9bc1b6a169efacc4c4983b3b86
+root@ubuntu:/home/silviaz# docker ps
+CONTAINER ID   IMAGE     COMMAND                  CREATED          STATUS          PORTS                                                  NAMES
+152ae676024b   mysql     "docker-entrypoint.s…"   10 seconds ago   Up 4 seconds    0.0.0.0:3306->3306/tcp, :::3306->3306/tcp, 33060/tcp   mysql-a
+97a55fa302e0   ubuntu    "bash"                   37 minutes ago   Up 37 minutes                                                          ubuntu-a
+
+---------------------
+Entrar no container:
+docker exec -it mysql-a bash
+mysql -u root -p --protocol=tcp (digitar a senha quando pedir)
+
+Executando:
+root@ubuntu:/home/silviaz# docker exec -ti mysql-a bash
+bash-4.4# mysql -u root -p --protocol=tcp
+Enter password: 
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 8
+Server version: 8.0.31 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2022, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql>
+------------------------------
+Ver informações do container:
+docker inspect mysql-a
+
+IP do container: 
+  "IPAddress": "172.17.0.3"
+
+posso usar o mysql sem entrar no bash do container (porque estou na mesma rede e liberei a porta padrão do mysql):
+
+mysql -u root -p --protocol=tcp
+
+================================
+Acessando um container externamente
+
+
+
+
+
+
+ 
+

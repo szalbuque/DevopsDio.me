@@ -1,0 +1,24 @@
+Introdução e laboratório virtual
+Introdução ao Docker e containers
+- modelo cliente x servidor
+- custo do datacenter
+- cloud
+- virtualização
+- microsserviços e containers
+
+Pré requisitos e considerações sobre o laboratório virtual de estudos
+- trilha de linux
+- virtual box
+
+Instalando o docker
+- ubuntu server com 2 ou 4gb
+- rede bridged adapter
+- criar o usuário root na vm
+- acesso via ssh
+> ssh root@ip da máquina
+> cat /etc/*release* (para ver a release do ubuntu)
+- site oficial do Docker (procurar o script de download e instalação para ubuntu)
+- executar o script
+> docker version (ver a versão do docker)
+> systemctl status docker
+
