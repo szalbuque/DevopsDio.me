@@ -238,6 +238,7 @@ mysql        latest    6cc1a43ad84d   3 hours ago   535MB
 ubuntu       latest    216c552ea5ba   2 weeks ago   77.8MB
 root@ubuntu:/home/silviaz# docker run -e MYSQL_ROOT_PASSWORD=Senha123 --name mysql-a -d -p 3306:3306 mysql
 152ae676024bc77a22fbaa50fc69d01e21526a9bc1b6a169efacc4c4983b3b86
+
 root@ubuntu:/home/silviaz# docker ps
 CONTAINER ID   IMAGE     COMMAND                  CREATED          STATUS          PORTS                                                  NAMES
 152ae676024b   mysql     "docker-entrypoint.s…"   10 seconds ago   Up 4 seconds    0.0.0.0:3306->3306/tcp, :::3306->3306/tcp, 33060/tcp   mysql-a
@@ -270,15 +271,68 @@ Ver informações do container:
 docker inspect mysql-a
 
 IP do container: 
-  "IPAddress": "172.17.0.3"
+  "IPAddress": "172.17.0.2",
 
-posso usar o mysql sem entrar no bash do container (porque estou na mesma rede e liberei a porta padrão do mysql):
+Se eu tiver o mysql-client instalado na minha VM, posso usar o mysql sem entrar no bash do container (porque estou na mesma rede e liberei a porta padrão do mysql):
 
 mysql -u root -p --protocol=tcp
 
 ================================
 Acessando um container externamente
 
+IP da minha VM: 192.168.0.101
+
+Baixar o MySQL Workbench no meu notebook
+Criar uma conexão
+host: ip da vm
+database name: aula
+user: root
+senha: Senha123
+porta: 3306
+
+Acessar o database aula, que criamos anteriormente dentro do container.
+Rodar este código SQL:
+CREATE TABLE alunos (
+    AlunoID int,
+    Nome varchar(50),
+    Sobrenome varchar(50),
+    Endereco varchar(150),
+    Cidade varchar(50)
+);
+
+
+
+INSERT INTO alunos (AlunoID, Nome, Sobrenome, Endereco, Cidade) VALUES (1, 'Carlos Alberto', 'da Silva', 'Av. que sobe e desce que ninguém conhece', 'Manaus');
+==================
+
+Parando e reiniciando um container
+
+root@ubuntu:/home/silviaz# docker ps
+CONTAINER ID   IMAGE     COMMAND                  CREATED        STATUS          PORTS                           
+                       NAMES
+152ae676024b   mysql     "docker-entrypoint.s…"   15 hours ago   Up 23 minutes   0.0.0.0:3306->3306/tcp, :::3306->3306/tcp, 33060/tcp   mysql-a
+root@ubuntu:/home/silviaz# docker stop mysql-a
+mysql-a
+root@ubuntu:/home/silviaz# docker ps
+CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
+root@ubuntu:/home/silviaz# docker ps -a
+CONTAINER ID   IMAGE     COMMAND                  CREATED          STATUS                        PORTS     NAMES
+bd992f8a0d4c   mysql     "docker-entrypoint.s…"   32 minutes ago   Exited (1) 31 minutes ago               infallible_lehmann
+152ae676024b   mysql     "docker-entrypoint.s…"   15 hours ago     Exited (0) 12 seconds ago               mysql-a
+97a55fa302e0   ubuntu    "bash"                   15 hours ago     Exited (255) 37 minutes ago             ubuntu-a
+root@ubuntu:/home/silviaz# docker start mysql-a
+mysql-a
+root@ubuntu:/home/silviaz# docker ps
+CONTAINER ID   IMAGE     COMMAND                  CREATED        STATUS         PORTS                            
+                      NAMES
+152ae676024b   mysql     "docker-entrypoint.s…"   15 hours ago   Up 4 seconds   0.0.0.0:3306->3306/tcp, :::3306->3306/tcp, 33060/tcp   mysql-a
+
+Perdi os dados que inseri no database? Não! Vamos ver:
+Entrar lá no banco e verificar.
+
+E se eu excluir o container? Daí eu perco os dados!
+
+Para evitar esse problema, o ideal é alocar o banco de dados num container separado da aplicação.
 
 
 

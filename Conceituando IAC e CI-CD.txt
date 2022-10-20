@@ -1,0 +1,50 @@
+CONCEITUANDO IAC E CI/CD
+
+Automatizar por meio de código a configuração e o provisionamento de recursos GCP, evitando erros humanos, economizando tempo.
+
+Manualmente é difícil de controlar e auditar.
+
+Automatizando é possível fazer o versionamento.
+
+IAC:
+- ferramentas: voltadas para provisionamento de recursos
+- gestão: para fazer alterações na infraestrutura, os engenheiros de automação devem fazer uma solicitação no sistema para implantar na produção
+- controle de versão: todo o código é configurado e armazenado no git p.ex.
+- processo de implantação: pipelines
+
+BENEFÍCIOS:
+- controle pelo git
+- declarativo
+- infraestrutura diferencial entre o estado desejado e o estado atual
+- modelos reutilizáveis em uma organização (no mesmo cloud provider)
+
+==================
+
+PRODUTOS
+
+Google Cloud Deployment Manager (somente GCP)
+- vantagem: suporte do Google
+
+Terraform (tem uma equipe do Google dedicada para o Terraform)
+- open source
+- adesão do mercado
+
+============
+
+INTEGRAÇÃO E ENTREGA CONTÍNUA (CI/CD)
+
+Faz o commit no git e toda uma esteira de deployment funciona automaticamente.
+
+Automatização no processo de implantação de sistemas por meio de um pipeline de CI/CD. Todas as mudanças nas aplicações e na infraetrutura aconteçam numa esteira de integração contínua.
+
+Auditáveis. Mínimo de interrupção possível.
+
+Integração contínua (CI): prática recomendada do modelo ágil e de DevOps para integrar, como parte da rotina, alterações de código na ramificação principal de um repositório e testar as alterações com o máximo de antecedência e frequência possível.
+
+Entrega Contínua (CD): capacidade de obter alterações de todos os tipos - incluindo novos recursos, alterações de ocnfiguração, correções de bugs e experimentos - em produção ou nas mãos dos usuários, com segurança e rapidez de maneira sustentável.
+
+Implantação Contínua: estratégia para lançamentos de software em que qualquer confirmação de código que passa no CI é automaticamente liberado no ambiente de produção.
+
+
+
+

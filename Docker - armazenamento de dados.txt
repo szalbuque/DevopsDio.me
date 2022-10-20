@@ -1,0 +1,161 @@
+Docker
+Armazenamento de Dados
+Montando mount um local de armazenamento
+
+docker inspect mysql-a
+procurar Mounts
+volume
+destination
+padrão /var/lib/mysql
+
+na VM, criar um diretório /data/mysql-a
+
+parar o container
+docker stop mysql-A
+
+excluir o container
+docker rm mysql-A
+
+Rodar o container especificando o diretório criado na máquina local (host) como local de armazenamento dos dados:
+
+docker run -e MYSQL_ROOT_PASSWORD=Senha123 --name mysql-a -d -p 3306:3306 --volume=/data/mysql-a:/var/lib/mysql mysql
+
+Resultado:
+
+root@ubuntu:/data# docker run -e MYSQL_ROOT_PASSWORD=Senha123 --name mysql-a -d -p 3306:3306 --volume=/data/mysql-a:/var/lib/mysql mysql
+720b3538c77aaad7c047b86eb27750a48e9a5fa77208bcd4355818bb654139c7
+root@ubuntu:/data# ls
+mysql-a
+root@ubuntu:/data# cd mysql-a/
+root@ubuntu:/data/mysql-a# ls
+'#ib_16384_0.dblwr'   binlog.000001     client-key.pem   mysql.ibd            server-cert.pem
+'#ib_16384_1.dblwr'   binlog.index      ib_buffer_pool   mysql.sock           server-key.pem
+'#innodb_redo'        ca-key.pem        ibdata1          performance_schema   sys
+'#innodb_temp'        ca.pem            ibtmp1           private_key.pem      undo_001
+ auto.cnf             client-cert.pem   mysql            public_key.pem       undo_002
+
+------------------------
+
+Acessar o banco de dados:
+
+mysql -u root -p --protocol=tcp --port=3306
+inserir um database e uma tabela
+parar e excluir o container
+criar um novo container com o mesmo caminho de armazenamento
+testar
+
+o banco de dados ainda está lá
+--------------------------
+
+Tipos de mount bind, named, dockerfile volume
+
+Outras formas de criar um volume de dados no docker
+
+3 tipos de volumes ou montagens:
+
+BIND: (o que fizemos na última aula)
+Vincular um determinado diretório ou arquivo do host dentro do conteiner:
+
+> docker run -v /hostdir:/containerdir mysql
+
+NAMED:
+Similar ao BIND, porém o volume é criado na pasta padrão do docker: /var/lib/docker (no host).
+O volume somente poderá ser referenciado pelo nome.
+
+Criação: docker volume create nome-do-volume
+Utilização: docker run -v nome-do-volume:/containerdir mysql
+
+DOCKERFILE VOLUME:
+Tipo de volume que é criado pela instrução VOLUME, dentro do dockerfile. Também é alocado no diretório /var/lib/docker do host, mas não tem um nome determinado. 
+O volume é criado ao executar o container e é útil para salvar dados persistentes. 
+O desenvolvedor pode dizer onde estão os dados importantes e o que deve ser persistente.
+
+QUAL USAR:
+O docker recomenda o uso de volumes em vez de binds, pois são criados e gerenciados pelo docker.
+
+========================
+Exemplos de MOUNT na prática
+
+docker run 
+-v (bind mount)
+-mount
+
+Abaixo, usa o bind, com a fonte na pasta /data/debian-a no host e dentro do container a pasta /data
+Vai baixar a imagem do debian
+
+docker run -dti --mount type=bind,src=/data/debian-a,dst=/data debian
+
+Se eu quiser fazer o bind para uma pasta somente leitura:
+docker stop nome-do-container
+
+O mesmo comando acima, usando o "ro" após o destino:
+docker run -dti --mount type=bind,src=/data/debian-a,dst=/data,ro debian
+
+DOCKER VOLUME
+
+docker volume ls (lista os volumes criados pelo próprio docker)
+
+docker volume create data-debian (cria um volume docker)
+
+cd /var/lib/docker
+ls
+cd volumes
+ls
+(mostra os volumes do docker)
+
+docker run -dti --name debian-a --mount type-volume,src=data-debian,dst=/data debian
+
+docker -ti exec debian-a bash
+cd /data
+ls
+
+Posso subir outro container usando o mesmo volume.
+
+Para excluir o volume é necessário parar e excluir os containers que o utilizam.
+
+docker volume rm data-debian
+
+docker inspect debian-a (mostra no "Mounts" os binds ou volumes que ele utiliza)
+
+EXCLUIR um container sem precisar parar antes:
+docker rm -f nomedocontainer
+
+docker volume prune (limpa todos os volumes do docker que não estão em uso)
+
+docker container prune (limpa todos os containers que não estão em uso)
+
+======================
+EXEMPLO: CONTAINER APACHE COM APLICAÇÃO WEB
+
+docker pull httpd
+mkdir /data/apache-a
+cd /data/apache-a
+nano index.html (código simples)
+
+vamos mapear essa pasta para o container
+
+docker run --name apache-a -d -p 80:80 --volume=/data/apache-a:/usr/local/apache2/htdocs httpd
+
+o endereço da pasta dentro do container foi visto no site docker hub
+
+acessar o ip do host para testar
+
+=======================
+EXEMPLO: CONTAINER PHP-APACHE
+
+Ver a imagem do PHP no docker hub
+Pegar a versão que vem com apache
+
+docker pull php:7.4-apache
+
+mkdir /data/php-a
+
+docker run --name php-a -d -p 8080:80 --volume=/data/php-a:/var/www/html php:7.4-apache
+
+cd php-a
+nano index.php (código simples php)
+
+acessar o ip do host com a porta 8080 para testar
+
+
+
