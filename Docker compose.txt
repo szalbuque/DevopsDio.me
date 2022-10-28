@@ -1,0 +1,60 @@
+DOCKER COMPOSE
+
+Introdução e instalação do Docker Compose
+
+Unir dois ou mais containers numa só aplicação.
+
+No docker hub, verificar a versão do compose a utilizar, de acordo com a versão do docker.
+
+> apt-get install -y docker-compose
+
+=======================
+
+Docker Compose Exemplo Prático
+
+Pasta /data/mysql-c vai conter o banco de dados.
+Pasta /composer/primeiro vai conter o arquivo yaml
+> docker-compose up -d
+Este comando lê o arquivo docker-compose.yml e cria os containers conforme as especificações contidas nele. Vai executar em segundo plano (-d).
+
+> docker container ls
+CONTAINER ID   IMAGE       COMMAND                  CREATED           
+   STATUS              PORTS                                          
+        NAMES
+618332165dc4   adminer     "entrypoint.sh docke…"   About a minute ago   Up About a minute   0.0.0.0:8080->8080/tcp, :::8080->8080/tcp              primeiro_adminer_1
+a13a98bb6725   mysql:5.7   "docker-entrypoint.s…"   About a minute ago   Up About a minute   0.0.0.0:3306->3306/tcp, :::3306->3306/tcp, 33060/tcp   primeiro_mysqlsrv_1
+
+==========================
+
+Docker compose down (para e exclui)
+
+root@ubuntu:/compose/primeiro# docker-compose down
+Stopping primeiro_adminer_1  ... done
+Stopping primeiro_mysqlsrv_1 ... done
+Removing primeiro_adminer_1  ... done
+Removing primeiro_mysqlsrv_1 ... done
+Removing network primeiro_minha-rede
+
+==========================
+
+EXEMPLO PHP APACHE MYSQL
+
+Vai usar uma imagem criada pelo usuário webdevops que roda php e apache sobre o alpine.
+A aplicação vai rodar na porta 4500.
+Vai usar um bind para a pasta /data/php.
+Rede: minha-rede.
+Serviços:
+	- web (apache com php sobre alpine)
+	- db (mysql, porta 3306)
+	- phpmyadmin (porta 8080) - arquivo de configuração upload.ini -> php-phpmyadmin.ini
+
+=======================
+
+UTILIZANDO EXEMPLOS DO GITHUB DO DOCKER
+
+https://github.com/docker/awesome-compose
+
+na aula usou:
+Nextcloud with Redis and MariaDB
+This example defines one of the basic setups for Nextcloud. More details on how to further customize the installation and the compose file can be found on the official image page.
+

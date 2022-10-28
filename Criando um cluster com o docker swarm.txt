@@ -1,0 +1,46 @@
+CRIANDO UM CLUSTER COM O DOCKER SWARM
+
+O QUE É UM CLUSTER
+
+Computadores ligados que trabalham em conjunto, como uma unidade.
+O docker swarm vai controlar os computadores do cluster.
+Clustering nativo de hosts do Docker.
+
+Nós gerenciadores.
+- rodam os comandos CLI do Docker
+- token de associação
+- caso um nó de trabalho fique fora do ar, os containers são migrados para os outros nós
+- também pode ser um nó de trabalho
+- se houver outros nós gerenciadores, eles assumem o controle caso um nó gerenciador falhe (mas precisa de 51% dos gerenciadores funcioando)
+
+Nós de trabalho.
+=======================
+
+CLUSTER EM NUVEM - REDES E SUB REDES
+
+As VMs precisam usar a mesma sub-rede, que vamos criar.
+Criar tudo na mesma região e zona.
+Especificar o nome da rede: dockervpc
+CIDR IPv4: 172.31.0.0/24
+
+Criar o Gateway
+Nomear o gateway: gateway-docker
+===================
+
+CLUSTER EM NUVEM - SUBINDO MÁQUINAS EC2
+
+criar 4 vms que precisam se comunicar entre si.
+
+network settings usar a vpc criada e a subrede
+
+habilitar IP público automático
+
+instalar automaticamente o docker na criação das máquinas
+
+Criando a primeira instância no google cloud:
+- nome: ubuntu1
+linha de comando para criação:
+gcloud compute instances create ubuntu1 --project=bootcampdiome --zone=southamerica-east1-b --machine-type=e2-micro --network-interface=network-tier=PREMIUM,subnet=default --maintenance-policy=MIGRATE --provisioning-model=STANDARD --service-account=401170359289-compute@developer.gserviceaccount.com --scopes=https://www.googleapis.com/auth/cloud-platform --enable-display-device --tags=http-server --create-disk=auto-delete=yes,boot=yes,device-name=ubuntu1,image=projects/debian-cloud/global/images/debian-11-bullseye-v20220920,mode=rw,size=10,type=projects/bootcampdiome/zones/us-west4-b/diskTypes/pd-balanced --no-shielded-secure-boot --shielded-vtpm --shielded-integrity-monitoring --labels=grupo=dockerswarm --reservation-affinity=any
+
+
+

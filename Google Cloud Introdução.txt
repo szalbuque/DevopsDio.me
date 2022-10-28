@@ -1,0 +1,124 @@
+INTRODUÇÃO AO GOOGLE CLOUD PLATFORM
+
+Cloud computing:
+
+Entregar recursos de TI sob demanda por meio da internet com preços pré-definidos de pagamento conforme o uso.
+
+Acesso transparente e rápido.
+
+Os serviços dos diferentes provedores são parecidos, mas as implementações são diferentes.
+
+Benefícios do cloud computing:
+- agilidade / velocidade
+- eficiência
+- elasticidade
+- economia de custo
+- globalmente distribuído
+- suporte
+- manutenção
+- menos trabalhoso
+
+==================
+
+QUANDO NÃO USAR
+
+Empresas com exabytes de dados, centenas de milhares de CPUs, uma carga crescente de trabalho.
+Constroem sua própria cloud.
+Ex.: Google, Microsoft, Amazon, IBM.
+
+==================
+
+TIPOS DE SERVIÇOS: IAAS, PAAS, SAAS
+==================
+
+DEFINIÇÃO DE REGIÕES E ZONAS
+
+Região geográfica: coleção de zonas
+
+cloud.google.com locations
+34 regiões
+103 zonas
+173 locais de borda da rede
+mais de 200 países e territórios
+
+Exemplo de zona: região-a, região-b
+
+Zona é domínio de falha único dentro de uma região.
+
+Tolerância a falha e alta disponibilidade: implantar em várias zonas em uma região.
+
+Recursos por zona funcionam apenas em uma zona.
+
+Recursos regionais são implantados de forma redundante em várias zonas de uma região exemplo App Engine.
+
+Recursos multi-regionais (alta disponibilidade, desempenho, eficiência).
+
+=====================
+
+PONTOS DE PRESENÇA (ponto de acesso à rede do Google)
+
+ O google opera uma rede global de pontos de presença de peering, o que significa que o tráfego do cliente pode viajar dentro da rede até que esteja perto do destino, fornecendo uma experiência melhor e mais segurança aos usuários.
+Ex.: Interconnect e Google CDN.
+
+
+====================
+
+GOOGLE CLOUD PLATFORM
+GOOGLE CLOUD NETWORKING
+
+Todos os datacenters do Google são interligados por fibra ótica.
+Infraestrutura de rede própria. Não sai da própria rede. Mais eficiente e seguro.
+
+====================
+
+LATÊNCIA
+
+Tempo que uma solicitação leva para ser transferida de um ponto para outro em milissegundos.
+
+site gcping.com
+=====================
+
+PRODUTOS
+
+====================
+
+RESPONSABILIDADE COMPARTILHADA
+
+Provedor + cliente
+Muito importante
+Questões de segurança, compliance
+Termos de responsabilidade
+
+======================
+
+SLA - SERVICE LEVEL AGREEMENT
+
+Contrato entre o fornecedor e o cliente.
+1. definição dos resultados a obter
+2. tempo de execução das atividades
+3. definição de responsáveis pela atividades
+4. definição das ferramentas utilizadas
+
+cloud.google.com/terms/sla
+
+=======================
+
+DOCUMENTAÇÃO
+
+Cada produto tem uma extensa documentação.
+
+Exemplo: cloud.google.com/compute
+
+Tem sempre um guia de início rápido.
+
+Tem as boas práticas.
+
+Tem github público.
+
+
+
+
+
+
+
+

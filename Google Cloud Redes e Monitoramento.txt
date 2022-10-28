@@ -1,0 +1,61 @@
+GOOGLE CLOUD REDES E MONITORAMENTO
+
+REDES VPC
+
+Rede de Nuvem Privada Virtual
+
+Similar a uma rede física. Implementada dentro do projeto.
+É criada uma VPC default junto com o projeto.
+Os produtos de infraestrutura se conectam a esta rede virtual.
+É possível criar uma Cloud VPN da minha rede local para a VPC.
+=================
+
+INFRAESTRUTURA DE REDE GLOBAL
+
+Quando criamos uma VPC ela é conectável à rede global da Google Cloud.
+
+==================
+
+CAMADA DE REDE
+
+Standard e Premium
+
+======================
+
+PROTEÇÃO E CRIPTOGRAFIA
+
+Criptografia sem necessidade de ação humana para isso.
+O Google não tem acesso ao dado do cliente.
+
+=======================
+
+CONCEITOS VPC
+
+- shared VPC: VPC host project
+
+======================
+
+GOOGLE CLOUD INTERCONNECT
+
+- um link dedicado entre minha rede local e a rede do google
+- uma fibra dedicada ou através de parceiro
+- entrega de dados mais eficaz e mais segura
+
+=======================
+
+MONITORAMENTO E REGISTRO
+
+Cloud Operations:
+- Cloud logging:
+-- log viewer
+-- metrics and alerts
+-- retention and policies
+- Cloud monitoring
+-- charts e dashboards
+-- alerts e notifications
+-- SLO monitoring e uptime checks
+
+Painel > atividade -- ações executadas dentro do google cloud pelos usuários e services accounts
+
+
+

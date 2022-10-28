@@ -1,0 +1,93 @@
+GESTÃO DE IDENTIDADES COM BOAS PRÁTICAS DE SEGURANÇA
+
+GOOGLE CLOUD
+
+PONTOS IMPORTANTES
+
+Domínio, acessos, políticas, gestão de identidade, recursos, controle de custos.
+
+Ver Google Cloud Adoption Framework Whitepaper
+
+Adoção da nuvem:
+- Pessoas + Tecnologia + Processos
+- Aprender continuamente
+- Definir os objetivos com clareza
+- Proteger de forma abrangente
+- Escalar eficientemente
+==================
+
+GESTÃO DE IDENTIDADE
+
+- Autenticação segura e confiável de usuários e serviços
+- Proteção contra perda de credenciais e tentativas de falsificação de identidade
+
+
+CASOS DE USO
+
+Como Sysadmin
+- sincronizar o AD com o Azure AD
+- single sign-on (SSO)
+
+Como empresa
+- segregar grupos de administradores
+- organizar os grupos
+- organizar unidades de negócios
+
+AUTENTICAÇÃO: Cloud Identity
+AUTORIZAÇÃO: Cloud IAM
+AUDITORIA: Cloud Operations Audit Logging & Reports API
+
+===============
+
+CLOUD IDENTITY IDaaS (Identidade como serviço)
+
+Unificação de recursos
+- gestão do ciclo de vida dos usuários
+- gestão de disositivos
+- segurança da conta
+- SSO
+- relatórios e análises
+- extensível por APIs
+- Cloud Directory
+- geerenciamento de APP
+
+Usuários + grupos + unidades organizacionais
+
+Acessos aos recursos pelo Cloud IAM
+
+Dois consoles distintos: para gestão de identidades / para gestão de acessos aos recursos
+
+================
+
+PALAVRAS CHAVE
+
+domínio primário : Cloud identity - domínio G Workspace (suaempresa.com)
+
+alias do domínio: exemplo suaempresa.co.uk
+
+domínio secundário: exemplo subempresa.com
+
+usuário do domínio primário:
+joao@company.com
+
+usuário do domínio primário com alias:
+ana@company.co.uk
+
+usuário do domínio secundário:
+lauro@subsidiary.com
+
+Ver mapa de decisão para usar o Cloud Identity.
+
+Duas opções de Cloud Identity: Free (limite de 50 usuários) e Premium.
+
+(Cloud Identity) Super Admin DIFERENTE do (Cloud IAM) Organization Admin
+
+Links de boas práticas de contas de superadministrador
+
+Link de boas práticas do IAM (segurança)
+
+Sempre iniciar usuários novos com privilégios mínimos.
+
+
+
+

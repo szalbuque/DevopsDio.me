@@ -1,0 +1,27 @@
+Criei a pasta: /compose/desafio
+Criei a pasta: /compose/desafio/website
+Na pasta /compose/desafio, criei o arquivo: docker-compose.yml com o conteúdo de exemplo do github do Denilson.
+
+version: '3.9'
+services:
+  apache:
+    image: httpd:latest
+    container_name: my-apache-app
+    ports:
+    - '80:80'
+    volumes:
+    - ./website:/usr/local/apache2/htdocs
+
+Na pasta /compose/desafio/website, criei um arquivo index.html com o conteúdo:
+
+<html>
+	<h1> teste do docker compose </h1>
+</html>
+
+Voltei para a pasta /compose/desafio e rodei o comando:
+> docker-compose up
+
+Deu erro porque já tinha um processo usando a porta 80.
+Parei com  systemctl stop apache2
+Rodei novamente, sem erro.
+Funcionou.

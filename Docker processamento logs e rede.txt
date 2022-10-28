@@ -1,0 +1,63 @@
+LIMITANDO MEMÓRIA E CPU DO CONTAINER
+
+docker stats nomedocontainer
+
+Mostra
+
+ID, NAME CPU% MEMUSAGE/LIMIT MEM% NET I/O BLOCK I/O PIDS
+
+identificador do container
+nome do container
+porcentagem da CPU que está usando
+uso de memória pelo container
+porcentagem de uso da memória
+uso da rede
+uso do disco
+número de processos
+
+Comando abaixo limita a quant de memória e de processamento que o container vai usar
+> docker update nomedocontainer -m 128M --cpus 0.2
+
+Limitando na criação do container
+
+> docker run --name ubuntu-c -dti -m 128M --cpus 0.2 ubuntu
+
+Para fazer testes: comando stress
+
+> stress --cpu 1 --vm-bytes 50m --vm 1 --vm-bytes 50m
+
+=========================
+Informações, logs e processos
+
+docker info (informações sobre o servidor onde o docker está instalado)
+
+docker container logs mysql-a (ver os processos em execução, portas usadas, etc.)
+
+docker container top ubuntu-a (mostra os processos em execução )
+
+===========================
+
+Redes
+
+ip a ( no host ): vai mostrar as placas de rede inclusive as associadas aos containers docker
+
+docker network ls (lista as redes)
+
+docker network inspect bridge (mostra os containers que estão associados a rede bridge)
+
+iputils-ping (pacote do ping)
+
+todos os containers que estão na mesma rede conseguem se comunicar
+
+mas posso isolar os containers usando a rede
+
+CRIAR UMA REDE
+docker network create minha-rede
+
+ASSOCIAR UM CONTAINER A ESSA REDE
+docker run -dti name ubuntu-a --network minha-rede ubuntu
+
+EXCLUIR A REDE
+docker network rm minha-rede
+
+

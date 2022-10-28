@@ -1,0 +1,12 @@
+HAND ON: PROVISIONANDO USUÁRIOS CLOUD IDENTITY
+
+REGISTRO DE DOMÍNIO
+
+- registro.br
+- google domains
+
+====================
+
+workspace.google.com/signup/gcpidentity/welcome
+
+admin.google.com (admin console)
