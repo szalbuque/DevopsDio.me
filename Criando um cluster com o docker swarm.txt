@@ -37,10 +37,168 @@ habilitar IP público automático
 
 instalar automaticamente o docker na criação das máquinas
 
-Criando a primeira instância no google cloud:
-- nome: ubuntu1
-linha de comando para criação:
-gcloud compute instances create ubuntu1 --project=bootcampdiome --zone=southamerica-east1-b --machine-type=e2-micro --network-interface=network-tier=PREMIUM,subnet=default --maintenance-policy=MIGRATE --provisioning-model=STANDARD --service-account=401170359289-compute@developer.gserviceaccount.com --scopes=https://www.googleapis.com/auth/cloud-platform --enable-display-device --tags=http-server --create-disk=auto-delete=yes,boot=yes,device-name=ubuntu1,image=projects/debian-cloud/global/images/debian-11-bullseye-v20220920,mode=rw,size=10,type=projects/bootcampdiome/zones/us-west4-b/diskTypes/pd-balanced --no-shielded-secure-boot --shielded-vtpm --shielded-integrity-monitoring --labels=grupo=dockerswarm --reservation-affinity=any
+Criando a primeira instância no google 
+
+=================================
+
+INICIANDO UM CLUSTER SWARM
+
+Criar quatro VMs iguais (4 instâncias)
+Liberar a porta 2377 no firewall nas 4 instâncias
+
+Criar o nó gerenciador (AWS):
+- fazer o acesso remoto pelo IP público
+- sudo su
+- hostnamectl hostname aws1
+- docker swarm init
+-- vai mostrar o toker de join deste cluster
+
+Criar o primeiro nó worker:
+- conectar por SSH pelo IP público
+- sudo su
+- hostnamectl hostname aws2
+- docker swarm join --token ....
+
+Os outros nós workers são criados da mesma forma.
+
+Verificando o cluster:
+- entrar no nó gerenciador
+- docker node ls
+
+==========================
+CLUSTER EM INFRAESTRURA LOCAL
+
+- usa Virtual Box e Vagrant
+- criar pasta lab-vagrant
+- abrir essa pasta no terminal
+- vagrant init
+- dir
+
+editar o Vagrantfile no Visual Studio Code
+
+config.vm.box = "bento/ubuntu-22.04"
+config.vm.network "public_network"
+config.vm.provision "shell",path:"instalar-docker.sh"
+
+criar o arquivo: instalar-docker.sh
+pegar comandos de instalação no site do docker
+
+- comando vagrant up
+- comando vagrant ssh
+- comando vagrant destroy -f (destrói as máquinas que ele criou)
+
+=======================
+
+INICIANDO O CLUSTER EM INFRAESTRUTURA LOCAL
+
+- baixar o Vagrantfile do github do instrutor Denilson Bonatti
+- vagrant up (cria as máquinas virtuais no virtual box de acordo com as configurações do Vagrantfile
+- vagrant ssh node01 (acessa a VM chamada node01 por SSH)
+- usuário padrão: vagrant (senha vagrant)
+
+> docker swarm init --advertise-addr 10.0.0.180 (ip da eth1)
+
+copiar o comando docker swarm com o token
+
+> vagrant ssh node02
+> sudo su
+> usar o comando docker swarm join com o token
+
+No nó gerenciador, verificar o cluster:
+> docker node ls
+
+========================
+
+CRIANDO UM SERVIÇO EM UM CLUSTER
+
+No nó gerenciador, verificar se há algum serviço rodando:
+> docker service ls
+
+Criar um serviço apache com 15 réplicas na porta 80:
+> docker service create --name web-server --replicas 15 -p 80:80 httpd
+
+Se não existir a imagem no host, ele vai baixar do docker hub.
+
+> docker service ls (mostra o serviço)
+> docker service ps web-server (mostra todos os nós e os containers criados)
+
+O nó gerenciador tem um IP externo. Tem que estar com a porta 80 aberta no firewall.
+
+Por enquanto, todos os IPs externos de cada VM vão funcionar, mostrando a homepage do web-server.
+
+Posso deixar o nó gerenciador somente com a função de gerenciar, sem ter containers.
+> docker node update --availability drain aws1
+
+Se eu remover o serviço criado e subir novamente, ele já não vai mais criar os containers no nó gerenciador.
+
+# docker service rm web-server
+# docker service create --name web-server --replicas 15 -p 80:80 httpd
+# docker service ps web-server
+----------------------
+
+Para que o nó volte a aceitar a criação de containers, uso o comando:
+# docker node update --availability active aws1
+
+=======================
+
+CONSISTÊNCIA DE DADOS EM UM CLUSTER
+
+Remover o serviço criado anteriormente:
+# docker service rm web-server
+
+Criar um volume de dados:
+# docker volume create app
+
+	o volume é criado em: /var/lib/docker/volumes/app/_data
+
+Criar um arquivo index.html dentro dessa pasta. Bem simples.
+
+Criar um serviço para rodar no cluster docker swarm usando este volume como fonte de dados para a aplicação. O nome do serviço será meu-app. Serão criadas 15 réplicas que vão rodar em background. A fonte é a pasta app e o destino, dentro dos containers, será a pasta padrão do apache.
+
+# docker service create --name meu-app --replicas 15 -dt -p 80:80 --mount type=volume,src=app,dst=/usr/local/apache2/htdocs/ httpd
+----------------------------
+NFS 
+
+Só vai funcionar com o IP do nó gerenciador, porque a pasta de origem da aplicação só existe lá.
+
+Precisamos instalar o serviço NFS para replicar o conteúdo dessa pasta para os outros nós, automaticamente.
+Vamos precisar liberar a porta do NFS no firewall. Porta 2049 para a faixa de IPs das VMs.
+Vamos também precisar liberar o protocolo UDP para a mesma faixa de IPs.
+
+# apt install nfs-server -y
+
+Editar o arquivo de configuração do NFS:
+
+# nano /etc/exports
+
+no final do arquivo incluir esta linha:
+/var/lib/docker/volumes/app/_data *(rw,sync,subtree_check)
+
+# exportsfs -ar
+
+Acessar a VM ubuntu2 via SSH.Instalar o cliente NFS.
+# apt install nfs-common -y
+
+Testar o acesso à pasta compartilhada.
+# showmount -e 10.158.0.2
+
+Replicar a pasta do UBUNTU1 para o UBUNTU2:
+# mount 10.158.0.2:/var/lib/docker/volumes/app/_data /var/lib/docker/volumes/app/_data
+
+Fazer o mesmo nas outras VMs.
+
+==========================
+
+EXEMPLO DE APLICAÇÃO EM CLUSTER
+
+- um container com mysql
+- aplicação php rodando num cluster com 15 réplicas
+- repositório para pegar o código php: denilsonbonatti/docker-app-cluster
+
+
+
+
+
 
 
 

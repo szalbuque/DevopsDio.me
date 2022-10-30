@@ -1,0 +1,152 @@
+baixei e instalei o Google Cloud CLI no meu notebook
+finalizou a instalação e abriu o terminal rodando o comando gcloud init
+pediu para fazer o login, digitei Y
+foi para a página de login do Google
+cliquei em permitir
+
+no terminal, apareceu a mensagem dizendo que estava logada e pediu para selecionar um dos projetos
+
+selecionei o projeto 2: bootcampdiome
+
+pediu para configurar uma região e zona default, digitei Y
+
+selecionei a 41 (southamerica-east1-b)
+
+-------------------
+
+criei um par de chaves usando o comando:
+
+ssh-keygen -t rsa -f c:\Users\silviaz\.ssh\gcloud -C silviaz -b 2048
+
+executei esse comando no terminal CMD do Windows
+---------------------
+
+No gcloud CLI usei o comando:
+
+gcloud compute ssh silviaz@ubuntu1
+
+Foi aberta uma janela de terminal com acesso à linha de comando do servidor ubuntu1, com o usuário silviaz
+
+-----------------
+
+Comandos de configuração inicial da VM:
+
+sudo su
+apt-get update
+apt-get upgrade -y (demorado)
+curl -fsSL https://get.docker.com -o get-docker.sh
+DRY_RUN=1 sudo sh ./get-docker.sh
+
+-----------------
+
+Criação de uma imagem a partir desta máquina
+
+No console, acessar o painel Compute Engine e clicar em Create Machine Image. Inserir os dados solicitados e selecionar o nome da instância usada como base.
+
+Em Compute Engine > Machine images é possível ver a imagem criada.
+
+Clicando sobre o nome da imagem, é possível ver os detalhes dela.
+
+Na parte superior da tela vai aparecer "Create instance".
+
+Clicando aí, será possível escolher: nome da VM, região, zona, tipo do hardware.
+
+Criei a VM ubuntu2, com as mesmas configurações da ubuntu1.
+
+Para acessar essa nova VM, abri o shell do Google Cloud SDK e usei o comando:
+> gcloud compute ssh silviaz@ubuntu2
+
+No terminal da VM ubuntu2, usei os seguintes comandos, para verificar se a imagem funcionou:
+> sudo su
+> apt-get update
+> apt-get -y upgrade
+> docker --version
+
+Estava tudo certo.
+
+Criei mais duas VMs com a mesma imagem:
+- ubuntu3
+- ubuntu4
+
+----------------------
+Abrindo as portas necessárias no firewall
+
+No Google Cloud Console, clicar em Compute Engine.
+Ele vai mostrar todas as instâncias criadas.
+Ao lado de cada instância, aparecem três pontinhos.
+Clique nos três pontinhos e depois selecione View Network Details.
+As VMs criadas estão utilizando a rede default, criada automaticamente pelo Google Cloud.
+No menu à esquerda, clicar em Firewall.
+Serão exibidas todas as regras criadas automaticamente pelo Google Cloud, para a rede default.
+Clicando sobre o nome de uma regra, serão exibidos os seus detalhes e as VMs que a estão utilizando.
+Já existe uma regra liberando o acesso à porta 80 (default-allow-http) e todas as VMs criadas estão com esta regra ativa. Isso será necessário para testar o acesso à aplicação web que irá rodar no cluster docker swarm.
+É preciso criar uma regra para liberar o acesso à porta TCP 2377, que é utilizada pelo docker swarm.
+
+Clicar em Create Firewall Rule.
+Criar uma regra liberando o acesso de entrada em todas as máquinas da rede default, com Source IPv4 Range: 10.158.0.0/24 (este é o range de IPs internos que foram atribuídos às VMs automaticamente, pelo Google Cloud).
+
+-------------------
+Configurar o cluster docker swarm:
+
+Criar o nó gerenciador (ubuntu1):
+- fazer o acesso remoto por SSH
+- sudo su
+- docker swarm init
+-- vai mostrar o token de join deste cluster
+docker swarm join --token SWMTKN-1-3wimh852dibonp9dsqeebu0y7g0z4iasixrns05k7uznzjaovc-9f3sf6odxh53vgcccpje3b9ya 10.158.0.2:2377
+
+Criar os nós workers (ubuntu2, ubuntu3, ubuntu4)
+
+- fazer o acesso remoto por SSH
+# sudo su
+# docker swarm join --token SWMTKN-1-3wimh852dibonp9dsqeebu0y7g0z4iasixrns05k7uznzjaovc-9f3sf6odxh53vgcccpje3b9ya 10.158.0.2:2377
+
+No nó gerenciador, verificar os nós criados:
+# docker node ls
+
+----------------------
+Rodando um web server no cluster
+
+No nó gerenciador:
+
+Verificar se há algum serviço rodando no cluster:
+# docker service ls
+
+Criar um serviço apache com 15 réplicas na porta 80:
+# docker service create --name web-server --replicas 15 -p 80:80 httpd
+
+Verificar o serviço rodando:
+# docker service ls
+(mostra o ID do serviço, o nome, o modo, o número de réplicas a imagem usada e a porta em que está rodando)
+
+Ver todos os nós e containers rodando:
+# docker service ps web-server
+
+Testar a aplicação:
+
+Num computador de fora da rede default, acessar o navegador com o IP externo do nó gerenciador (VM ubuntu1).
+
+Deve aparecer a frase: It works!
+
+------------------------------
+
+Posso deixar o nó gerenciador somente com a função de gerenciar, sem ter containers.
+
+# docker node update --availability drain ubuntu1
+
+Olhando novamente os nós e containers, percebemos que ele está "matando" os containers que rodavam no nó gerenciador e recriando esses containers nos outros nós.
+
+# docker service ps web-server
+
+-------------------------
+
+Se eu remover o serviço criado e subir novamente, ele já não vai mais criar os containers no nó gerenciador.
+
+# docker service rm web-server
+# docker service create --name web-server --replicas 15 -p 80:80 httpd
+# docker service ps web-server
+
+
+------------------------------
+
+
