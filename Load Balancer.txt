@@ -1,0 +1,24 @@
+CRIANDO UM AWS LOAD BALANCER
+
+quero criar um único endereço para acesso à aplicação
+o sistema vai direcionar para os nós do cluster docker swarm
+evitar a sobrecarga de um nó
+
+O recurso da AWS Load Balancers é pago. Mas também posso fazer isso por um serviço em servidor web.
+
+> EC2 > load balancers (classic load balancer)> create
+nome: docker-swarm
+criar LB interno: selecionar a rede onde estão as VMs
+
+Protocolo: HTTP
+Porta 80
+protocolo da instância: 80
+adicionar a subrede onde estão as VMs
+atribui o grupo de segurança criado para as VMs
+configurar o nome do arquivo para o ping path (index.php para o exemplo)
+marcar as instâncias EC2
+
+Ele gera um nome DNS (endpoint) para acesso à aplicação.
+
+Testar pelo navegador.
+
