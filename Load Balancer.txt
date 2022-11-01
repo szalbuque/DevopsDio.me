@@ -21,4 +21,13 @@ marcar as instâncias EC2
 Ele gera um nome DNS (endpoint) para acesso à aplicação.
 
 Testar pelo navegador.
+====================
+
+TESTE DE CARGA
+
+SITE: loader.io/tests
+New target host (nome DNS do load balancer)
+Precisa criar um arquivo txt no mesmo local do index.php no nó gerenciador (conforme instruções do site)
+
+
 
