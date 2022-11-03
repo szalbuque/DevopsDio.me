@@ -20,4 +20,4 @@ Criação do vagrantfile e dos arquivos .sh auxiliares.
 Execução do comando:
 > vagrant up
 
-Erro na execução: 
+Resultado do comando no arquivo Resultado Vagrant Up.txt

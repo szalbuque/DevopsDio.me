@@ -1,0 +1,223 @@
+PS C:\Users\silviaz\Documents\repositorios\DevopsDio.me-main\ClusterSwarmLocal-desafio\vagrant> vagrant up
+Bringing machine 'manager' up with 'virtualbox' provider...
+Bringing machine 'node01' up with 'virtualbox' provider...
+==> manager: Importing base box 'bento/ubuntu-22.04'...
+==> manager: Matching MAC address for NAT networking...
+==> manager: Setting the name of the VM: manager
+==> manager: Clearing any previously set network interfaces...
+==> manager: Preparing network interfaces based on configuration...
+    manager: Adapter 1: nat
+    manager: Adapter 2: hostonly
+==> manager: Forwarding ports...
+    manager: 22 (guest) => 2222 (host) (adapter 1)
+==> manager: Running 'pre-boot' VM customizations...
+==> manager: Booting VM...
+==> manager: Waiting for machine to boot. This may take a few minutes...
+    manager: SSH address: 127.0.0.1:2222
+    manager: SSH username: vagrant
+    manager: SSH auth method: private key
+    manager: Warning: Connection reset. Retrying...
+    manager: Warning: Connection aborted. Retrying...
+    manager: 
+    manager: Vagrant insecure key detected. Vagrant will automatically replace
+    manager: this with a newly generated keypair for better security.
+    manager: 
+    manager: Inserting generated public key within guest...
+    manager: Removing insecure key from the guest if it's present...
+    manager: Key inserted! Disconnecting and reconnecting using new SSH key...
+==> manager: Machine booted and ready!
+==> manager: Checking for guest additions in VM...
+    manager: The guest additions on this VM do not match the installed version of
+    manager: VirtualBox! In most cases this is fine, but in rare cases it can
+    manager: prevent things such as shared folders from working properly. If you see
+    manager: shared folder errors, please make sure the guest additions within the
+    manager: virtual machine match the version of VirtualBox you have installed on
+    manager: your host and reload your VM.
+    manager:
+    manager: Guest Additions Version: 6.1.34
+    manager: VirtualBox Version: 7.0
+==> manager: Setting hostname...
+==> manager: Configuring and enabling network interfaces...
+==> manager: Mounting shared folders...
+    manager: /vagrant => C:/Users/silviaz/Documents/repositorios/DevopsDio.me-main/ClusterSwarmLocal-desafio/vagrant
+==> manager: Running provisioner: shell...
+    manager: Running: C:/Users/silviaz/AppData/Local/Temp/vagrant-shell20221103-9172-jmrh5.sh
+    manager: # Executing docker install script, commit: 4f282167c425347a931ccfd95cc91fab041d414f
+    manager: + sh -c 'apt-get update -qq >/dev/null'
+    manager: + sh -c 'DEBIAN_FRONTEND=noninteractive apt-get install -y -qq apt-transport-https ca-certificates curl >/dev/null'
+    manager: + sh -c 'mkdir -p /etc/apt/keyrings && chmod -R 0755 /etc/apt/keyrings'
+    manager: + sh -c 'curl -fsSL "https://download.docker.com/linux/ubuntu/gpg" | gpg --dearmor --yes -o /etc/apt/keyrings/docker.gpg'
+    manager: + sh -c 'chmod a+r /etc/apt/keyrings/docker.gpg'
+    manager: + sh -c 'echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu jammy stable" > /etc/apt/sources.list.d/docker.list'
+    manager: + sh -c 'apt-get update -qq >/dev/null'
+    manager: + sh -c 'DEBIAN_FRONTEND=noninteractive apt-get install -y -qq --no-install-recommends docker-ce docker-ce-cli containerd.io docker-compose-plugin docker-scan-plugin >/dev/null'
+    manager: + version_gte 20.10
+    manager: + '[' -z '' ']'
+    manager: + return 0
+    manager: + sh -c 'DEBIAN_FRONTEND=noninteractive apt-get install -y -qq docker-ce-rootless-extras >/dev/null'
+    manager: + sh -c 'docker version'
+    manager: Client: Docker Engine - Community
+    manager:  Version:           20.10.21
+    manager:  API version:       1.41
+    manager:  Go version:        go1.18.7
+    manager:  Git commit:        baeda1f
+    manager:  Built:             Tue Oct 25 18:01:58 2022
+    manager:  OS/Arch:           linux/amd64
+    manager:  Context:           default
+    manager:  Experimental:      true
+    manager:
+    manager: Server: Docker Engine - Community
+    manager:  Engine:
+    manager:   Version:          20.10.21
+    manager:   API version:      1.41 (minimum version 1.12)
+    manager:   Go version:       go1.18.7
+    manager:   Git commit:       3056208
+    manager:   Built:            Tue Oct 25 17:59:49 2022
+    manager:   OS/Arch:          linux/amd64
+    manager:   Experimental:     false
+    manager:  containerd:
+    manager:   Version:          1.6.9
+    manager:   GitCommit:        1c90a442489720eec95342e1789ee8a5e1b9536f
+    manager:  runc:
+    manager:   Version:          1.1.4
+    manager:   GitCommit:        v1.1.4-0-g5fd4c4d
+    manager:  docker-init:
+    manager:   Version:          0.19.0
+    manager:   GitCommit:        de40ad0
+    manager: 
+    manager: ================================================================================
+    manager:
+    manager: To run Docker as a non-privileged user, consider setting up the
+    manager: Docker daemon in rootless mode for your user:
+    manager: 
+    manager:     dockerd-rootless-setuptool.sh install
+    manager:
+    manager: Visit https://docs.docker.com/go/rootless/ to learn about rootless mode.
+    manager:
+    manager:
+    manager: To run the Docker daemon as a fully privileged service, but granting non-root
+    manager: users access, refer to https://docs.docker.com/go/daemon-access/
+    manager: 
+    manager: WARNING: Access to the remote API on a privileged Docker daemon is equivalent
+    manager:          to root access on the host. Refer to the 'Docker daemon attack surface'
+    manager:          documentation for details: https://docs.docker.com/go/attack-surface/
+    manager: 
+    manager: ================================================================================
+    manager:
+==> manager: Running provisioner: shell...
+    manager: Running: C:/Users/silviaz/AppData/Local/Temp/vagrant-shell20221103-9172-13j3xqx.sh
+    manager: Swarm initialized: current node (wnnixy13gtwg4xnzilhwcxzw6) is now a manager.
+    manager:
+    manager: To add a worker to this swarm, run the following command:
+    manager:
+    manager:     docker swarm join --token SWMTKN-1-50j5qcsww731lur69c318rmwrqkywg4bn2efa4ge2rt1ximok5-daylth1yee5ttzu7mk1g2pfz8 10.10.10.100:2377
+    manager:
+    manager: To add a manager to this swarm, run 'docker swarm join-token manager' and follow the instructions.
+    manager:
+==> node01: Importing base box 'bento/ubuntu-22.04'...
+==> node01: Matching MAC address for NAT networking...
+==> node01: Setting the name of the VM: node01
+==> node01: Fixed port collision for 22 => 2222. Now on port 2200.
+==> node01: Clearing any previously set network interfaces...
+==> node01: Preparing network interfaces based on configuration...
+    node01: Adapter 1: nat
+    node01: Adapter 2: hostonly
+==> node01: Forwarding ports...
+    node01: 22 (guest) => 2200 (host) (adapter 1)
+==> node01: Running 'pre-boot' VM customizations...
+==> node01: Booting VM...
+==> node01: Waiting for machine to boot. This may take a few minutes...
+    node01: SSH address: 127.0.0.1:2200
+    node01: SSH username: vagrant
+    node01: SSH auth method: private key
+    node01: Warning: Connection reset. Retrying...
+    node01: Warning: Connection aborted. Retrying...
+    node01: 
+    node01: Vagrant insecure key detected. Vagrant will automatically replace
+    node01: this with a newly generated keypair for better security.
+    node01: 
+    node01: Inserting generated public key within guest...
+    node01: Removing insecure key from the guest if it's present...
+    node01: Key inserted! Disconnecting and reconnecting using new SSH key...
+==> node01: Machine booted and ready!
+==> node01: Checking for guest additions in VM...
+    node01: The guest additions on this VM do not match the installed version of
+    node01: VirtualBox! In most cases this is fine, but in rare cases it can
+    node01: prevent things such as shared folders from working properly. If you see
+    node01: shared folder errors, please make sure the guest additions within the
+    node01: virtual machine match the version of VirtualBox you have installed on
+    node01: your host and reload your VM.
+    node01:
+    node01: Guest Additions Version: 6.1.34
+    node01: VirtualBox Version: 7.0
+==> node01: Setting hostname...
+==> node01: Configuring and enabling network interfaces...
+==> node01: Mounting shared folders...
+    node01: /vagrant => C:/Users/silviaz/Documents/repositorios/DevopsDio.me-main/ClusterSwarmLocal-desafio/vagrant
+==> node01: Running provisioner: shell...
+    node01: Running: C:/Users/silviaz/AppData/Local/Temp/vagrant-shell20221103-9172-z89cys.sh
+    node01: # Executing docker install script, commit: 4f282167c425347a931ccfd95cc91fab041d414f
+    node01: + sh -c 'apt-get update -qq >/dev/null'
+    node01: + sh -c 'DEBIAN_FRONTEND=noninteractive apt-get install -y -qq apt-transport-https ca-certificates curl >/dev/null'
+    node01: + sh -c 'mkdir -p /etc/apt/keyrings && chmod -R 0755 /etc/apt/keyrings'
+    node01: + sh -c 'curl -fsSL "https://download.docker.com/linux/ubuntu/gpg" | gpg --dearmor --yes -o /etc/apt/keyrings/docker.gpg'
+    node01: + sh -c 'chmod a+r /etc/apt/keyrings/docker.gpg'
+    node01: + sh -c 'echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu jammy stable" > /etc/apt/sources.list.d/docker.list'
+    node01: + sh -c 'apt-get update -qq >/dev/null'
+    node01: + sh -c 'DEBIAN_FRONTEND=noninteractive apt-get install -y -qq --no-install-recommends docker-ce docker-ce-cli containerd.io docker-compose-plugin docker-scan-plugin >/dev/null'
+    node01: + version_gte 20.10
+    node01: + '[' -z '' ']'
+    node01: + return 0
+    node01: + sh -c 'DEBIAN_FRONTEND=noninteractive apt-get install -y -qq docker-ce-rootless-extras >/dev/null'
+    node01: + sh -c 'docker version'
+    node01: Client: Docker Engine - Community
+    node01:  Version:           20.10.21
+    node01:  API version:       1.41
+    node01:  Go version:        go1.18.7
+    node01:  Git commit:        baeda1f
+    node01:  Built:             Tue Oct 25 18:01:58 2022
+    node01:  OS/Arch:           linux/amd64
+    node01:  Context:           default
+    node01:  Experimental:      true
+    node01:
+    node01: Server: Docker Engine - Community
+    node01:  Engine:
+    node01:   Version:          20.10.21
+    node01:   API version:      1.41 (minimum version 1.12)
+    node01:   Go version:       go1.18.7
+    node01:   Git commit:       3056208
+    node01:   Built:            Tue Oct 25 17:59:49 2022
+    node01:   OS/Arch:          linux/amd64
+    node01:   Experimental:     false
+    node01:  containerd:
+    node01:   Version:          1.6.9
+    node01:   GitCommit:        1c90a442489720eec95342e1789ee8a5e1b9536f
+    node01:  runc:
+    node01:   Version:          1.1.4
+    node01:   GitCommit:        v1.1.4-0-g5fd4c4d
+    node01:  docker-init:
+    node01:   Version:          0.19.0
+    node01:   GitCommit:        de40ad0
+    node01:
+    node01: ================================================================================
+    node01: 
+    node01: To run Docker as a non-privileged user, consider setting up the
+    node01: Docker daemon in rootless mode for your user:
+    node01:
+    node01:     dockerd-rootless-setuptool.sh install
+    node01:
+    node01: Visit https://docs.docker.com/go/rootless/ to learn about rootless mode.
+    node01:
+    node01: 
+    node01: To run the Docker daemon as a fully privileged service, but granting non-root
+    node01: users access, refer to https://docs.docker.com/go/daemon-access/
+    node01:
+    node01: WARNING: Access to the remote API on a privileged Docker daemon is equivalent
+    node01:          to root access on the host. Refer to the 'Docker daemon attack surface'
+    node01:          documentation for details: https://docs.docker.com/go/attack-surface/
+    node01:
+    node01: ================================================================================
+    node01: 
+==> node01: Running provisioner: shell...
+    node01: Running: C:/Users/silviaz/AppData/Local/Temp/vagrant-shell20221103-9172-1abdfr7.sh
+    node01: This node joined a swarm as a worker.
