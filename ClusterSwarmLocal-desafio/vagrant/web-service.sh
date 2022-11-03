@@ -1,0 +1,1 @@
+docker service create --name web-server --replicas 15 -p 80:80 httpd

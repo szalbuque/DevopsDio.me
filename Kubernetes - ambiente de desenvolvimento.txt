@@ -1,0 +1,17 @@
+AMBIENTE DE DESENVOLVIMENTO KUBERNETES
+
+CRIANDO UM CLUSTER KUBERNETES COM O MINIKUBE
+
+Laboratório local para estudos
+
+Minikube
+
+Executa o kubernetes em uma máquina local. Vamos usar com o virtual box.
+Cria um cluster de um nó único.
+
+VM:
+- 2 cores de cpu
+- 2gb ram
+- 20gb de disco
+- conexão de internet
+

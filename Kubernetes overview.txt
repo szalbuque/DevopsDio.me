@@ -1,0 +1,62 @@
+KUBERNETES OVERVIEW
+
+Introdução ao Kubernetes
+
+Ferramenta open source de orquestração de containers criada pelo Google.
+Automatizar a implantação, o dimensionamento e o gerenciamento de aplicativos em containers.
+Organizar e administrar aplicações em containers em ambientes onde existem dezenase a té milhares de containers.
+Funciona em diferentes ambientes:
+- infra local;
+- vms;
+- cloud pública;
+- cloud híbrida.
+
+Por que kubernetes?
+
+- migração de aplicações monolíticas para microsserviços;
+disponibilidade de aplicação (diminuição do downtime);
+- escalabilidade e alta performance;
+- recuperação de desastre (backup/restore).
+
+Como utilizar o kubernetes?
+
+1) criar um cluster kubernetes
+2) implantar um aplicativo no cluster
+3) explorar o aplicativo
+4) expor o aplicativo publicamente
+5) escalar o aplicativo
+6) atualizar o aplicativo
+
+https://kubernetes.io/pt-br/docs/tutorials/kubernetes-basics
+
+====================================
+
+ARQUITETURA BÁSICA DO KUBERNETES
+
+O cluster kubernetes é formado por nós (servidores). Pode ser apenas um servidor.
+Pode ser um servidor físico ou uma vm, ou uma mistura de servidores físicos e virtuais.
+
+Cluster kubernetes:
+- conjunto de nós que executam aplicativos em conteiners;
+- conjunto de máquinas usadas para executar aplicações em containers; quando você executa o kubernetes, está executando um cluster;
+- no mínimo possui:
+-- um control plane
+-- uma máquina ou nó
+
+A aplicação é encapsulada num pod. Os containers podem ser criados usando:
+- docker
+- containerd
+- CRI-O
+
+Cada container normalmente é executado em um pod.
+
+O QUE É UM POD?
+
+Conjunto de um ou mais containers, sendo a menor unidade de uma aplicação Kubernetes.
+Os pods são compostos por um container nos casos de uso mais comuns ou por vários containers fortemente acoplados em cenários mais avançados.
+Os containers são agrupados nesses pods para que os recursos sejam compartilhados de modo mais inteligente.
+É um grupo de um ou mais containers de aplicativos que inclui armazenamento compartilhado (volumes), endereço IP e informações sobre como executá-los.
+
+
+
+

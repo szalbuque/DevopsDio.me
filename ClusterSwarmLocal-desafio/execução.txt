@@ -1,0 +1,23 @@
+Instalação do Vagrant no notebook.
+
+Criação da pasta vagrant.
+
+Abertura da pasta vagrant no terminal do Windows PowerShell.
+
+Execução do comando:
+> vagrant init
+
+Resultado:
+A `Vagrantfile` has been placed in this directory. You are now
+ready to `vagrant up` your first virtual environment! Please read
+the comments in the Vagrantfile as well as documentation on
+`vagrantup.com` for more information on using Vagrant.
+
+Abertura da pasta vagrant no Visual Studio Code.
+
+Criação do vagrantfile e dos arquivos .sh auxiliares.
+
+Execução do comando:
+> vagrant up
+
+Erro na execução: 
