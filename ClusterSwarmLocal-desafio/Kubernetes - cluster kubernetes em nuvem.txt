@@ -78,6 +78,37 @@ trazer o arquivo de configuração do cluster da nuvem para o computador local
 ADICIONANDO NODES AO CLUSTER
 
 
+AWS console
+Cluster criado, preciso adicionar os nós
+Vamos criar 2 nós
+EKS > Clusters > Kubernetes-lab, clicar na aba Compute
+Vai aparecer Nodes e Node groups
+Precisa criar um Node group
+Add node group
+name
+node IAM role (criar) abrir nova aba com o IAM
+Create role
+EC2
+três regras: rede, container e eks
+AmazonEKS_CNI_Policy
+AmazonEKSWorkerNodePolicy
+AmazonEC2ContainerRegistryReadOnly
+Next
+Selecionar o tipo da instância que vamos usar
+t3.small
+disk size: 10g
+2 nodes
+next
+deixar as subredes padrão
+create
+
+para verificar os nós subindo:
+no powershell (com AWS CLI)
+>kubectl get nodes --watch
+
+Para excluir o cluster, primeiro excluir o grupo de nós.
+
+
 
 
 

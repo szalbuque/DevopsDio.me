@@ -1,0 +1,43 @@
+CLUSTER KUBERNETES EM NUVEM COM GCP
+
+Pode usar os créditos da conta trial.
+
+Pesquisa: kubernetes engine (gke)
+
+Criar um novo projeto.
+
+Ativar a API.
+
+Criar
+
+Standard: você gerencia seu cluster.
+
+Exemplo:
+Nome: meu-cluster
+Zona: padrão
+à esquerda: Pools de nós, manter o padrão
+criar
+
+Esperar pela criação
+
+Como acessar:
+- usar o CLI gcloud
+- no terminal:
+> Install-Module GoogleCloud
+- liberar a execução de scripts:
+> Set-ExecutionPolicy RemoteSigned
+- instalar os componentes de acesso ao gke
+> gcloud components install gke-gcloud-auth-plugin
+> gcloud auth list
+> gcloud auth login (caso ainda não tenha feito o login com usuário e senha do gcp)
+
+No console do cluster kubernetes tem ícone de conectar, que vai mostrar a linha de comando que devo usar para conectar no cluster.
+
+Copiar e colar no terminal.
+
+>kubectl.exe get nodes (mostra os nós do cluster)
+
+Já posso criar os pods.
+
+Para excluir, no console do cluster: 
+- clicar nos três pontinhos ao lado do cluster e clicar em excluir, para não ficar consumindo os créditos.

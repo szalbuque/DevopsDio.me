@@ -1,0 +1,10 @@
+CONCEITOS BÁSICOS SOBRE PODS EM KUBERNETES
+
+ARQUIVO YAML
+
+O YAML é uma linguagem de serialização de dados muito usada na escrita de arquivos de configuração.
+Usa identação rígida, com espaços em branco. Usando o VSCode pode usar TAB.
+Extensão: .yml ou .yaml
+
+
+
