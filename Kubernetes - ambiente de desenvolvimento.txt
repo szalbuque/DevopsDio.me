@@ -15,3 +15,105 @@ VM:
 - 20gb de disco
 - conexão de internet
 
+=============
+
+Laboratório local de estudos
+
+Instalar o minikube no windows
+Abrir o power shell
+> minikube start
+Ele vai usar o virtual box automaticamente.
+> minikube status
+> minikube stop
+> minikube start
+
+Precisa instalar o kubectl.
+Ferramenta de linha de comando do kubernetes. Para implantar aplicativos, inspecionar e gerenciar recursos de cluster e visualizar logs.
+
+Download do arquivo kubectl.exe e salvar numa pasta kubectl no c:
+
+Incluir esse caminho no PATH.
+==========
+
+Instalação do minikube e kubectl no linux
+
+os passos estão no site
+===========
+
+Ver informações sobre o cluster:
+
+> kubectl cluster-info
+Kubernetes control plane is running at https://192.168.59.101:8443
+CoreDNS is running at https://192.168.59.101:8443/api/v1/namespaces/kube-system/services/kube-dns:dns/proxy
+
+> kubectl get nodes
+NAME       STATUS   ROLES           AGE   VERSION
+minikube   Ready    control-plane   19m   v1.25.2
+============
+Fazendo o deploy de uma aplicação de exemplo:
+
+>  kubectl create deployment kubernetes-bootcamp --image=gcr.io/google-samples/kubernetes-bootcamp:v1
+
+deployment.apps/kubernetes-bootcamp created
+
+O que o kubectl fez:
+- procurou um nó apropriado no qual uma instância da aplicação pudesse ser executada (nesse caso só há um nó);
+- agendou a aplicação para rodar neste nó;
+- configurou o cluster para reagendar a instância em outro nó, quando necessário.
+
+Para ver o deployment:
+> kubectl get deployments
+NAME                  READY   UP-TO-DATE   AVAILABLE   AGE
+kubernetes-bootcamp   1/1     1            1           2m26s
+
+Há um deployment rodando uma única instância da aplicação. A aplicação está rodando dentro de um container Docker, no nó.
+
+Os pods que rodam dentro do Kubernetes estão numa rede privada, isolada. Por default, eles estão visíveis de outros pods e serviços no mesmo cluster Kubernetes, mas não de fora daquela rede.
+Quando usamos o comando kubectl, estamos interagindo com o cluster através do endpoint de uma API, que se comunica com a aplicação.
+O comando kubectl pode criar um proxy passará a comunicação para a rede privada do cluster.
+
+O comando kubectl proxy faz isso, mas prende o terminal. Será necessário abrir outro terminal. Será possível a conecção entre o host (o terminal) e o cluster Kubernetes. O proxy permite acesso direto à API a partir do terminal.
+
+> kubectl proxy
+Starting to serve on 127.0.0.1:8001
+
+> curl http://localhost:8001                                 
+
+
+StatusCode        : 200
+StatusDescription : OK
+Content           : {
+                      "paths": [
+                        "/.well-known/openid-configuration",
+                        "/api",
+                        "/api/v1",
+                        "/apis",
+                        "/apis/",
+                        "/apis/admissionregistration.k8s.io",
+                        "/apis/admissionregistration.k8s.io/v1",
+                       ...
+RawContent        : HTTP/1.1 200 OK
+                    Audit-Id: 05f324e6-3342-460b-a2bc-71f4007c56fd
+                    X-Kubernetes-Pf-Flowschema-Uid: 3419edab-8fcb-453b-a673-954464b3a366
+                    X-Kubernetes-Pf-Prioritylevel-Uid: 5b64ebd2-c3db-49f8-b1f1-6e4baf...
+Forms             : {}
+Headers           : {[Audit-Id, 05f324e6-3342-460b-a2bc-71f4007c56fd], [X-Kubernetes-Pf-Flowschema-Uid,
+                    3419edab-8fcb-453b-a673-954464b3a366], [X-Kubernetes-Pf-Prioritylevel-Uid,
+                    5b64ebd2-c3db-49f8-b1f1-6e4bafcb010f], [Transfer-Encoding, chunked]...}
+Images            : {}
+InputFields       : {}
+Links             : {}
+ParsedHtml        : mshtml.HTMLDocumentClass
+RawContentLength  : 5773
+
+O servidor da API vai criar automaticamente um endpoint para cada pod, baseado no nome do pod, que também é acessível através do proxy.
+
+==================
+
+As operações mais comuns podem ser realizadas com os comandos abaixo:
+
+kubectl get - listar recursos
+kubectl describe - mostrar informações detalhadas sobre um recurso
+kubectl logs - mostrar os logs de um container em um Pod
+kubectl exec - executar um comando em um contêiner em um Pod
+

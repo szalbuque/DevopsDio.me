@@ -1,0 +1,83 @@
+CLUSTER KUBERNETES EM NUVEM
+
+Cluster Kubernetes em Produção
+
+Servidor controlador (aconselhável ter pelo menos dois): 
+- control plane
+- kube-apiserver: servidor de API, valida e configura dados para os objetos presentes no cluster; atende às operações e fornece o frontend para o estado compartilhado do cluser por meio do qual todos os outros componentes interagem.
+- etcd: armazenamento de valor em cluster (dados do cluster - metadados).
+- kube-scheduler: atribui pods aos nós.
+- kube-controller-manager: loop que observa o estado compartilhado do cluster por meio do kube-apiserver e faz alterações tentando mover o estado atual para o estado desejado.
+
+Se for fazer o gerenciamento manual do control plane, vai usar as três principais ferramentas:
+- kubeadm: para criar o cluster;
+- kubelet: executa em todas as máquinas do cluster e cuida de tarefas como a inicialização de pods e containers;
+- kubectl: ferramenta de linha de comando.
+
+- Usando o serviço Kubernetes em cloud, não preciso me preocupar em configurar e administrar o nó gerenciador.
+
+Nós workers:
+- kubelet
+- k-proxy
+
+Exemplos de serviços kubernetes em nuvem:
+- Amazon EKS (não entra no free tier);
+-- passos:
+--- provisionar um EKS cluster
+--- fazer o deploy da aplicação
+--- conectar ao EKS
+--- rodas as aplicações
+
+- GCP Kubernetes Engine (GKE)
+- Azure Kubernetes Service (AKS)
+
+======================
+
+Custos de um cluster kubernetes em nuvem
+(AWS) - calculator.aws
+- EKS +
+- Nós (EC2)
+
+============================
+
+AWS CLI e credenciais de acesso
+
+Fazer o download da AWS CLI
+Instalar
+> aws --version
+Entrar no IAM da AWS
+My security credentials
+Access keys (copiar ID e secret access key)
+> aws configure 
+A partir daí posso fazer qualquer configuração na AWS.
+
+======================
+
+CRIANDO UM CLUSTER COM AKS
+
+Entrar no console AWS
+EKS
+nome do cluster
+versão
+política (precisa criar - abrir o IAM em outra aba)
+-- roles
+-- use cases: EKS (EKS - cluster)
+rede
+
+No powershell:
+verificar o status do cluster
+> aws eks --region sa-east-1 describe-cluster --name Kubernetes-lab --query cluster.status
+
+trazer o arquivo de configuração do cluster da nuvem para o computador local
+> aws eks --region sa-east-1 update-kubeconfig --name Kubernetes-lab
+
+> kubeclt get svc (mostra o status do cluster da nuvem)
+
+=====================
+
+ADICIONANDO NODES AO CLUSTER
+
+
+
+
+

@@ -1,0 +1,86 @@
+O que é DevOps
+Combinação de filosofias culturais, práticas e ferramentas que aumentam a capacidade de uma empresa de distribuir aplicativos e serviços em alta velocidade.
+
+O que é Deploy?
+A implantação envolve mover o software de um ambiente controlado para outro.
+Os ambientes mais comuns são:
+- desenvolvimento
+- integração
+- teste
+- produção
+
+Nosso projeto, são dois ambientes:
+- desenvolvimento
+- produção
+
+Práticas de DevOps
+- integração contínua (*)
+- entrega contínua (*)
+- microsserviços
+- infraestrutura como código
+- monitoramento e registro em log
+
+Integração contínua (CI)
+É uma prática de desenvolvimento de software em que os desenvolvedores, com frequência, juntam suas alterações de código em um repositório central. 
+Depois disso, criações e testes são executados.
+Os principais objetivos da integração contínua são encontrar e investigar erros mais rapidamente, melhorar a qualidade do software e reduzir o tempo necessário para validar e lançar novas atualizações de software.
+
+Entrega contínua (CD)
+É uma prática de desenvolvimento de software em alterações de código são criadas, testadas e preparadas automaticamente para liberação para produção.
+Ela expande com base na integração contínua, pela implantação de todas as alterações de código em um ambiente de teste e/ou produção, após o estágio de criação.
+Quanto a integração contínua é implementada adequadamente, os desenvolvedores sempre têm um artegato de criação pronto para ser implantado e que passou por um processo padronizado de teste.
+
+Contextualização do projeto:
+Aplicação:
+-- frontend (HTML/CSS/JS)
+-- backend (PHP e MySQL)
+
+https://github.com/digitalinnovationone/banco-carrefour-techday-cloud-devops
+
+Usar kubernetes para fazer o deploy da aplicação em containers.
+O backend está configurado para estar num cluster e o front está configurado para ficar fora do cluster, mas pode alterar.
+
+Pode alterar a linguagem de programação e/ou realizar melhorias no projeto, desde que atenda às exigências de entrega.
+
+O QUE DEVE SER FEITO:
+
+Criar um pipeline de deploy desta aplicação em forma de containers em um cluster Kubernetes.
+Preferencialmente usar o GCP.
+
+
+ENTREGA DO PROJETO:
+
+Com o problema apresentado, o participante poderá criar o seu pipeline de CI/CD utilizando o GitLab, Terraform ou outra solução desejada, como no exemplo:
+https://gitlab.com/denilsonbonatti/app-cicd-dio/-/blob/main/.gitlab-ci.yml
+
+VÍDEO:
+O participante deverá apresentar um vídeo com o pit da sua solução com no máximo 5 minutos.
+
+Usar o zoom para gravar o vídeo
+
+
+DATA FINAL DE ENVIO DO FORMULÁRIO: 
+Link do formulário: https://forms.office.com/r/S8MHD0HrUb
+
+DIVULGAÇÃO DOS 10 FINALISTAS: 5/12
+EVENTO FINAL: 9/12
+
+Demonstração da solução a partir do 42:00
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
