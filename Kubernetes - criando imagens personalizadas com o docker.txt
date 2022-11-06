@@ -1,0 +1,111 @@
+CRIANDO IMAGENS PERSONALIZADAS COM O DOCKER
+
+CRIANDO UMA IMAGEM PERSONALIZADA E ENVIANDO PARA O DOCKER HUB
+
+Vou criar a imagem de um container, com meu aplicativo, e guardar no docker hub.
+
+Criar uma VM linux para instalar o docker e criar as imagens.
+
+Vou usar a instância ubuntu1, que criei no google cloud.
+
+Abri o Google Cloud SDK Shell.
+> gcloud compute ssh szalbuque2@ubuntu2
+
+abriu o putty conectado à vm
+
+szalbuque2@ubuntu2:~$ pwd
+/home/szalbuque2
+szalbuque2@ubuntu2:~$ mkdir app-2-kubernetes
+szalbuque2@ubuntu2:~$ cd app-2-kubernetes/
+szalbuque2@ubuntu2:~/app-2-kubernetes$
+
+Nesse diretório terei arquivos de configuração do docker e do kubernetes.
+
+Criar um diretório para o docker:
+szalbuque2@ubuntu1:~/app-2-kubernetes$ mkdir dockerfile
+szalbuque2@ubuntu1:~/app-2-kubernetes$ cd dockerfile/
+szalbuque2@ubuntu1:~/app-2-kubernetes/dockerfile$ 
+
+Criados dois arquivos: index.html e dockerfile, dentro desta pasta.
+Criando a imagem:
+szalbuque2@ubuntu2:~/app-2-kubernetes/dockerfile$ docker build . -t szalbuque/app-html:1.0
+Sending build context to Docker daemon  3.072kB
+Step 1/4 : FROM httpd:latest
+ ---> fe8735c23ec5
+Step 2/4 : WORKDIR /usr/local/apache2/htdocs/
+ ---> Using cache
+ ---> 6267a366a023
+Step 3/4 : COPY index.html /usr/local/apache2/htdocs/
+ ---> 7fad37fc9ca9
+Step 4/4 : EXPOSE 80
+ ---> Running in 527dc87ccfbc
+Removing intermediate container 527dc87ccfbc
+ ---> 54569c1aacb7
+Successfully built 54569c1aacb7
+Successfully tagged szalbuque/app-html:1.0
+
+szalbuque2@ubuntu2:~/app-2-kubernetes/dockerfile$ docker images
+REPOSITORY             TAG       IMAGE ID       CREATED              SIZE
+szalbuque/app-html     1.0       54569c1aacb7   About a minute ago   145MB
+
+Fazer o login no docker hub:
+$ docker login
+Login with your Docker ID to push and pull images from Docker Hub. If you don't have a Docker ID, head over to https://hub.docker.com to create one.
+Username: szalbuque
+Password:
+WARNING! Your password will be stored unencrypted in /home/szalbuque2/.docker/config.json.
+Configure a credential helper to remove this warning. See
+https://docs.docker.com/engine/reference/commandline/login/#credentials-store
+
+Login Succeeded
+
+Fazer o push:
+$ docker push szalbuque/app-html:1.0
+The push refers to repository [docker.io/szalbuque/app-html]
+ac1bbda8d791: Pushed
+1617cfaff5dd: Mounted from library/httpd
+36de10a434ef: Mounted from library/httpd
+6437b1170b0b: Mounted from library/httpd
+13fb8799144c: Mounted from library/httpd
+a12586ed027f: Mounted from library/httpd
+1.0: digest: sha256:e14abc18e6dd72065c114392fece8e2ab8ddd93e67f8e26b286b0a896e6d575b size: 1573
+
+
+============================
+
+CRIANDO UM DEPLOYMENT DE UM APLICATIVO NUM CLUSTER
+
+Criando o cluster na GCP.
+Kubernetes Engine.
+Criar.
+Standard.
+Nome: cluster-gke
+Zona: southamerica-east1-b
+Criar.
+(aguardar)
+
+Acessar pelo terminal usando a linha de comando para conexão.
+
+Entrar na pasta onde está o arquivo .yml
+Executar:
+> kubectl.exe apply -f .\app-deployment.yml
+Para ver os pods em execução:
+> kubectl.exe get pods 
+> kubectl.exe get deployment
+
+Ainda não estão expostos. Para expor:
+> kubectl.exe expose deployment html-deployment --type=LoadBalancer --name=app-html --port=80
+
+(aguardar um pouco para liberar o IP externo)
+
+Para ver se o serviço está pronto:
+> kubectl.exe get service
+NAME         TYPE           CLUSTER-IP    EXTERNAL-IP   PORT(S)        AGE
+app-html     LoadBalancer   10.64.13.55   35.198.5.16   80:31755/TCP   112s
+kubernetes   ClusterIP      10.64.0.1     <none>        443/TCP        35m
+
+Testar o acesso pelo IP externo, no navegador.
+
+ 
+
+

@@ -6,5 +6,343 @@ O YAML é uma linguagem de serialização de dados muito usada na escrita de arq
 Usa identação rígida, com espaços em branco. Usando o VSCode pode usar TAB.
 Extensão: .yml ou .yaml
 
+Começar pela versão.
+apiVersion
+kind: tipo do serviço
+
+boa prática : usar o mesmo nome para o pod, o container e a aplicação.
+
+===================
+
+CRIANDO O PRIMEIRO ARQUIVO YAML
+
+apiVersion: v1
+kind: Pod (tipo do objeto)
+metadata: (dados do pod)
+  name: app-html
+  labels:
+    app: app-html
+spec: (especificações do container)
+  containers:
+  - name: app-html
+    image: httpd:latest (a imagem pura do apache)
+    ports:
+    - containerPort: 80
+
+Usar o minikube para testar
+
+DevopsDio.me-main\kubernetes> minikube start
+(aguardar)
+DevopsDio.me-main\kubernetes> minikube status 
+minikube
+type: Control Plane
+host: Running
+kubelet: Running
+apiserver: Running
+kubeconfig: Configured
+
+DevopsDio.me-main\kubernetes> kubectl.exe get services (só tem o serviço do kubernetes rodando por enquanto)
+NAME         TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)   AGE
+kubernetes   ClusterIP   10.96.0.1    <none>        443/TCP   3m1s
+
+=======================
+
+IMPLEMENTANDO UM POD
+
+DevopsDio.me-main\kubernetes> kubectl.exe apply -f .\simple-pod.yml
+pod/app-html created
+
+DevopsDio.me-main\kubernetes> kubectl.exe get pods
+NAME       READY   STATUS              RESTARTS   AGE
+app-html   0/1     ContainerCreating   0          22s
+
+DevopsDio.me-main\kubernetes> kubectl.exe get pods
+NAME       READY   STATUS    RESTARTS   AGE
+app-html   1/1     Running   0          47s
+
+Precisa expor o pod para ter acesso externamente ao cluster.
+
+DevopsDio.me-main\kubernetes> kubectl.exe get pods -o wide
+NAME       READY   STATUS    RESTARTS   AGE   IP           NODE       NOMINATED NODE   READINESS GATES
+app-html   1/1     Running   0          94s   172.17.0.3   minikube   <none>           <none>
+
+O IP   172.17.0.3 é apenas interno ao cluster.
+
+Para fazer um teste, abrir outro terminal e acessar o cluster minikube por ssh:
+DevopsDio.me-main\kubernetes> minikube ssh
+            _         _ ( )           ( )
+  ___ ___  (_)  ___  (_)| |/')  _   _ | |_      __  
+/' _ ` _ `\| |/' _ `\| || , <  ( ) ( )| '_`\  /'__`\
+| ( ) ( ) || || ( ) || || |\`\ | (_) || |_) )(  ___/
+(_) (_) (_)(_)(_) (_)(_)(_) (_)`\___/'(_,__/'`\____)
+
+$ ip a
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast state UP group default qlen 1000
+    link/ether 08:00:27:a9:09:2d brd ff:ff:ff:ff:ff:ff
+    inet 10.0.2.15/24 brd 10.0.2.255 scope global dynamic eth0
+       valid_lft 85795sec preferred_lft 85795sec
+3: eth1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast state UP group default qlen 1000
+    link/ether 08:00:27:24:91:7e brd ff:ff:ff:ff:ff:ff
+    inet 192.168.59.100/24 brd 192.168.59.255 scope global dynamic eth1
+       valid_lft 595sec preferred_lft 595sec
+4: sit0@NONE: <NOARP> mtu 1480 qdisc noop state DOWN group default qlen 1000
+    link/sit 0.0.0.0 brd 0.0.0.0
+5: docker0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default
+    link/ether 02:42:2f:36:f8:c6 brd ff:ff:ff:ff:ff:ff
+    inet 172.17.0.1/16 brd 172.17.255.255 scope global docker0
+       valid_lft forever preferred_lft forever
+7: veth23853c8@if6: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue master docker0 state UP group default
+    link/ether 2e:44:73:af:82:39 brd ff:ff:ff:ff:ff:ff link-netnsid 0
+9: veth8e9e592@if8: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue master docker0 state UP group default
+    link/ether b6:dc:5c:65:87:00 brd ff:ff:ff:ff:ff:ff link-netnsid 1
+
+$ curl http://172.17.0.3
+<html><body><h1>It works!</h1></body></html>
+
+---------------------
+
+Para deletar este pod:
+DevopsDio.me-main\kubernetes> kubectl.exe delete pod app-html
+pod "app-html" deleted
+
+O arquivo de configuração continua lá. É fácil subir outro pod com a mesma configuração.
+
+===================================
+
+CRIANDO UM ARQUIVO YAML DE DEPLOYMENT
+
+A função do cluster é permitir a escalabilidade da aplicação. Criando réplicas.
+Usando um nó apenas, criando vários pods naquele nó (vertical).
+Usando mais nós (servidores), espalhar as réplicas nos nós (horizontal).
+Precisamos de um load balance para a escalabilidade horizontal.
+
+Primeiro criar as réplicas.
+
+Ver os nós disponíveis:
+> kubectl.exe get nodes
+NAME       STATUS   ROLES           AGE   VERSION
+minikube   Ready    control-plane   16m   v1.25.2
+
+Descrever o nó:
+> kubectl.exe describe node minikube
+Name:               minikube
+Roles:              control-plane
+Labels:             beta.kubernetes.io/arch=amd64
+                    beta.kubernetes.io/os=linux
+                    kubernetes.io/arch=amd64
+                    kubernetes.io/hostname=minikube
+                    kubernetes.io/os=linux
+                    minikube.k8s.io/commit=fe869b5d4da11ba318eb84a3ac00f336411de7ba
+                    minikube.k8s.io/name=minikube
+                    minikube.k8s.io/primary=true
+                    minikube.k8s.io/updated_at=2022_11_06T11_07_57_0700
+                    minikube.k8s.io/version=v1.27.1   
+                    node-role.kubernetes.io/control-plane=
+                    node.kubernetes.io/exclude-from-external-load-balancers=
+Annotations:        kubeadm.alpha.kubernetes.io/cri-socket: unix:///var/run/cri-dockerd.sock
+                    node.alpha.kubernetes.io/ttl: 0   
+                    volumes.kubernetes.io/controller-managed-attach-detach: true
+CreationTimestamp:  Sun, 06 Nov 2022 11:07:49 -0300   
+Taints:             <none>
+Unschedulable:      false
+Lease:
+  HolderIdentity:  minikube
+  AcquireTime:     <unset>
+  RenewTime:       Sun, 06 Nov 2022 11:24:58 -0300    
+Conditions:
+  Type             Status  LastHeartbeatTime          
+       LastTransitionTime                Reason                       Message
+  ----             ------  -----------------          
+       ------------------                ------                       -------
+  MemoryPressure   False   Sun, 06 Nov 2022 11:24:25 -0300   Sun, 06 Nov 2022 11:07:43 -0300   KubeletHasSufficientMemory   kubelet has sufficient memory available
+  DiskPressure     False   Sun, 06 Nov 2022 11:24:25 -0300   Sun, 06 Nov 2022 11:07:43 -0300   KubeletHasNoDiskPressure     kubelet has no disk pressure
+  PIDPressure      False   Sun, 06 Nov 2022 11:24:25 -0300   Sun, 06 Nov 2022 11:07:43 -0300   KubeletHasSufficientPID      kubelet has sufficient PID available  
+  Ready            True    Sun, 06 Nov 2022 11:24:25 -0300   Sun, 06 Nov 2022 11:08:08 -0300   KubeletReady                 kubelet is posting ready status       
+Addresses:
+  InternalIP:  192.168.59.100
+  Hostname:    minikube
+Capacity:
+  cpu:                2
+  ephemeral-storage:  17784752Ki
+  hugepages-2Mi:      0
+  memory:             2165980Ki
+  pods:               110
+Allocatable:
+  cpu:                2
+  ephemeral-storage:  17784752Ki
+  hugepages-2Mi:      0
+  memory:             2165980Ki
+  pods:               110
+System Info:
+  Machine ID:                 697a950b917b44f498bd137d827e2220
+  System UUID:                31024166-baac-174c-9e45-4e048f235b40
+  Boot ID:                    4c1c1249-7620-4ba6-89c5-86bb9319a1e2
+  Kernel Version:             5.10.57
+  OS Image:                   Buildroot 2021.02.12    
+  Operating System:           linux
+  Architecture:               amd64
+  Container Runtime Version:  docker://20.10.18       
+  Kubelet Version:            v1.25.2
+  Kube-Proxy Version:         v1.25.2
+PodCIDR:                      10.244.0.0/24
+PodCIDRs:                     10.244.0.0/24
+Non-terminated Pods:          (7 in total)
+  Namespace                   Name                    
+            CPU Requests  CPU Limits  Memory Requests  Memory Limits  Age
+  ---------                   ----                    
+            ------------  ----------  ---------------  -------------  ---
+  kube-system                 coredns-565d847f94-6ndr2            100m (5%)     0 (0%)      70Mi (3%)        170Mi (8%)     17m
+  kube-system                 etcd-minikube           
+            100m (5%)     0 (0%)      100Mi (4%)       0 (0%)         17m
+  kube-system                 kube-apiserver-minikube             250m (12%)    0 (0%)      0 (0%)          
+ 0 (0%)         17m
+  kube-system                 kube-controller-manager-minikube    200m (10%)    0 (0%)      0 (0%)          
+ 0 (0%)         17m
+  kube-system                 kube-proxy-pvwbd                    0 (0%)        0 (0%)      0 (0%)          
+ 0 (0%)         17m
+  kube-system                 kube-scheduler-minikube             100m (5%)     0 (0%)      0 (0%)          
+ 0 (0%)         17m
+  kube-system                 storage-provisioner                 0 (0%)        0 (0%)      0 (0%)          
+ 0 (0%)         17m
+Allocated resources:
+  (Total limits may be over 100 percent, i.e., overcommitted.)
+  Resource           Requests    Limits
+  --------           --------    ------
+  cpu                750m (37%)  0 (0%)
+  memory             170Mi (8%)  170Mi (8%)
+  ephemeral-storage  0 (0%)      0 (0%)
+  hugepages-2Mi      0 (0%)      0 (0%)
+Events:
+  Type    Reason                   Age                
+From             Message
+  ----    ------                   ----               
+----             -------
+  Normal  Starting                 16m                
+kube-proxy
+  Normal  NodeHasSufficientMemory  17m (x8 over 17m)  kubelet          Node minikube status is now: NodeHasSufficientMemory
+  Normal  NodeHasNoDiskPressure    17m (x8 over 17m)  kubelet          Node minikube status is now: NodeHasNoDiskPressure
+  Normal  NodeHasSufficientPID     17m (x7 over 17m)  kubelet          Node minikube status is now: NodeHasSufficientPID
+oDiskPressure
+  Normal  NodeHasSufficientPID     17m                kubelet          Node minikube status is now: NodeHasSufficientPID
+  Normal  NodeNotReady             17m                kubelet          Node minikube status is now: NodeNotReady
+  Normal  NodeAllocatableEnforced  17m                kubelet          Updated Node Allocatable limit across pods
+  Normal  RegisteredNode           17m                node-controller  Node minikube event: Registered Node minikube in Controller
+  Normal  NodeReady                17m                kubelet          Node minikube status is now: NodeReady
+
+------------------------
+Importante:
+
+capacidade total do nó:
+Capacity:
+  cpu:                2
+  ephemeral-storage:  17784752Ki
+  hugepages-2Mi:      0
+  memory:             2165980Ki
+  pods:               110
+------------------------
+
+Para criar as réplicas, o tipo (kind) especificado no yml tem que ser deployment.
+No site do kubernetes, buscar deployments para ver o arquivo yml modelo.
+
+DevopsDio.me-main\kubernetes> kubectl.exe  apply -f .\simple-deployment.ymldeployment.apps/app-html-deployment createdPS C:\Users\silviaz\Documents\repositorios\DevopsDio.me-main\kubernetes> kubectl.exe get pods
+NAME                                  READY   STATUS    RESTARTS   AGE
+app-html-deployment-994fcddf9-pfvth   1/1     Running   0          26sapp-html-deployment-994fcddf9-v9ndd   1/1     Running   0          26s
+app-html-deployment-994fcddf9-zmm5w   1/1     Running   0          26s
+
+Se eu deletar um pod, ele automaticamente cria outra réplica.
+
+Ainda não tenho um load balancer. Os pods são independentes. O ideal é que, quando houver uma requisição para esse serviço, o kubernetes envie cada requisição para um pod diferente, para balancear as respostas. Eles ainda não estão expostos.
+
+=====================================
+
+MAIS INFORMAÇÕES SOBRE UM DEPLOYMENT
+
+kubernetes> kubectl.exe get deployment
+NAME                  READY   UP-TO-DATE   AVAILABLE   AGE
+app-html-deployment   3/3     3            3           5m
+
+> kubectl.exe describe deployment app-html-deployment
+Name:                   app-html-deployment
+Namespace:              default
+CreationTimestamp:      Sun, 06 Nov 2022 11:55:57 -0300
+Labels:                 app=app-html
+Annotations:            deployment.kubernetes.io/revision: 1
+Selector:               app=app-html
+Replicas:               3 desired | 3 updated | 3 total | 3 available | 0 unavailable        
+StrategyType:           RollingUpdate
+MinReadySeconds:        0
+RollingUpdateStrategy:  25% max unavailable, 25% max surge
+Pod Template:
+  Labels:  app=app-html
+  Containers:
+   app-html:
+    Image:        httpd:latest
+    Port:         80/TCP
+    Host Port:    0/TCP
+    Environment:  <none>
+    Mounts:       <none>
+  Volumes:        <none>
+Conditions:
+  Type           Status  Reason
+  ----           ------  ------
+  Progressing    True    NewReplicaSetAvailable
+  Available      True    MinimumReplicasAvailable
+OldReplicaSets:  <none>
+NewReplicaSet:   app-html-deployment-994fcddf9 (3/3 replicas created)
+Events:
+  Type    Reason             Age   From                   Message
+  ----    ------             ----  ----                   -------
+  Normal  ScalingReplicaSet  6m8s  deployment-controller  Scaled up replica set app-html-deployment-994fcddf9 to 3
+
+-------------------
+
+Quero aumentar a quantidade de pods. Posso abrir o arquivo yml e trocar o número de réplicas. Posso também fazer essa alteração por linha de comando.
+
+> kubectl.exe scale deployment app-html-deployment --replicas=10
+deployment.apps/app-html-deployment scaled
+PS C:\Users\silviaz\Documents\repositorios\DevopsDio.me-main\kubernetes> kubectl.exe get pods
+NAME                                  READY   STATUS              RESTARTS   AGE
+app-html-deployment-994fcddf9-7jmqd   0/1     ContainerCreating   0          10s
+app-html-deployment-994fcddf9-8t8dk   0/1     ContainerCreating   0          9s
+app-html-deployment-994fcddf9-b74bv   0/1     ContainerCreating   0          10s
+app-html-deployment-994fcddf9-hhvlc   0/1     ContainerCreating   0          9s
+app-html-deployment-994fcddf9-pfvth   1/1     Running             0          8m
+app-html-deployment-994fcddf9-smrwf   0/1     ContainerCreating   0          9s
+app-html-deployment-994fcddf9-sq5l9   0/1     ContainerCreating   0          9s
+app-html-deployment-994fcddf9-tvws7   0/1     ContainerCreating   0          10s
+app-html-deployment-994fcddf9-v9ndd   1/1     Running             0          8m
+app-html-deployment-994fcddf9-wssh5   1/1     Running             0          6m35s
+
+Como estou usando o minikube, tenho apenas um nó. Se fosse um kubernetes em produção, os pods seriam espalhados automaticamente pelos nós disponíveis.
+
+============================
+
+EXPONDO UM DEPLOYMENT
+
+Suponha que estes pods tenham uma API que retorne o saldo bancário de uma conta, p.ex.
+A requisição desta API deve ser direcionada ao deployment. O kubernetes fará o redirecionamento automático para os pods.
+
+Preciso expor o deployment para consulta externa ao cluster e criar um load balancer.
+
+> kubectl.exe expose deployment app-html-deployment --type=LoadBalancer --name=app-html --port=80
+service/app-html exposed (ele cria um serviço para o load balancer)
+
+PS C:\Users\silviaz\Documents\repositorios\DevopsDio.me-main\kubernetes> kubectl.exe get service
+NAME         TYPE           CLUSTER-IP    EXTERNAL-IP   PORT(S)        AGE
+app-html     LoadBalancer   10.98.3.194   <pending>     80:31480/TCP   21s
+kubernetes   ClusterIP      10.96.0.1     <none>        443/TCP        62m
+
+Se estivesse em produção, ele daria automaticamente um IP externo. No minikube, é preciso usar um comando.
+
+> minikube service --url app-html
+http://192.168.59.100:31480          (usando esta url no navegador, vai aparecer it works!)
+
+
+
+
 
 
