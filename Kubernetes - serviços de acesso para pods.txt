@@ -1,0 +1,95 @@
+SERVIÇOS DE ACESSO PARA KUBERNETES PODS
+
+CRIANDO UM NODEPORT
+
+Quando criamos um Load Balancer, ele cria um novo IP para acessar todos os pods do cluster.
+
+Pode haver a necessidade de acessar somente um pod. Toda VM do cluster tem um IP externo.
+Para isso preciso criar um serviço chamado NodePort.
+
+Baixar o código de denilsonbonatti/k8s-pod-exemplo1-dio.git
+----------
+O arquivo index.php vai precisar de um container com apache e php.
+O dockerfile já está configurado.
+Na verdade, ele tem configurações extras, para conexão com banco de dados.
+---------
+O arquivo pod.yml vai gerar apenas um pod com a aplicação que estará na imagem que vou criar no docker hub.
+-----------
+O arquivo nodePort.yml
+Vai criar um serviço que é uma porta de acesso para a aplicação.
+Se deixar comentada a linha nodePort, o kubernetes vai gerar uma porta aleatória.
+------------
+Entrar na VM ubuntu2 para gerar a imagem e subir para o dockerhub.
+--------
+Fazer o clone do repositório
+Criar a imagem:
+# docker build . -t szalbuque/myapp-php:1.0
+# docker login
+# docker push szalbuque/myapp-php:1.0
+------------
+Conectar no cluster gcloud
+(deletei o cluster anterior e criei um novo: cluster-2)
+> kubectl.exe apply -f .\pod.yml
+
+> kubectl.exe get pods -o wide
+vai mostrar os IPs internos e externos dos pods:
+NAME                                       STATUS   ROLES    AGE   VERSION            INTERNAL-IP   EXTERNAL-IP      OS-IMAGE
+  KERNEL-VERSION   CONTAINER-RUNTIME
+gke-cluster-2-default-pool-7a2952a1-0l0z   Ready    <none>   10m   v1.23.8-gke.1900   10.128.0.5    35.192.209.41    Container-Optimized OS from Google   5.10.127+        containerd://1.5.13
+gke-cluster-2-default-pool-7a2952a1-vs2s   Ready    <none>   10m   v1.23.8-gke.1900   10.128.0.4    35.202.41.8      Container-Optimized OS from Google   5.10.127+        containerd://1.5.13
+gke-cluster-2-default-pool-7a2952a1-zzt6   Ready    <none>   10m   v1.23.8-gke.1900   10.128.0.3    34.173.176.192   Container-Optimized OS from Google   5.10.127+        containerd://1.5.13
+
+Quero acessar os pods através de uma porta específica.
+Isso que está sendo criado no nodePort.yml
+> kubectl.exe apply -f .\nodePort.yml
+> kubectl.exe describe service myapp-php-service
+W1107 10:39:05.238655   15832 gcp.go:119] WARNING: the gcp auth plugin is deprecated in v1.22+, unavailable in v1.26+; use gcloud instead.
+To learn more, consult https://cloud.google.com/blog/products/containers-kubernetes/kubectl-auth-changes-in-gke
+Name:                     myapp-php-service
+Namespace:                default
+Labels:                   <none>
+Annotations:              cloud.google.com/neg: {"ingress":true}
+Selector:                 app=myapp-php
+Type:                     NodePort
+IP Family Policy:         SingleStack
+IP Families:              IPv4
+IP:                       10.48.12.235
+IPs:                      10.48.12.235
+Port:                     <unset>  80/TCP
+TargetPort:               80/TCP
+NodePort:                 <unset>  31140/TCP <=== esta foi a porta que ele criou, precisa liberar no firewall
+Endpoints:                10.44.0.9:80
+Session Affinity:         None
+External Traffic Policy:  Cluster
+Events:                   <none>
+
+-----------
+Liberar a porta no firewall por linha de comando:
+> gcloud compute firewall-rules create my-app-php --allow tcp:31140
+
+Para testar, acessar pelo navegador o IP externo de qualquer um dos pods, usando a porta criada:
+http://35.192.209.41:31140/
+
+
+
+===============
+
+NODEPORT COM O MINIKUBE
+
+Gerar um pod no cluster local
+> kubectl.exe apply -f .\pod.yml
+> kubectl.exe get pods (aguardar)
+
+Criar um acesso para ele
+> kubectl.exe apply -f .\nodePort.yml
+> kubectl.exe get service
+> kubectl.exe describe service myapp-php-service
+Ver a porta que ele gerou.
+O minikube precisa gerar uma url.
+> minikube service myapp-php-service --url
+Pegar a url para testar.
+=====================
+
+EXECUTANDO APLICAÇÕES NO POD
+
+

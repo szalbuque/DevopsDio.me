@@ -84,6 +84,8 @@ Zona: southamerica-east1-b
 Criar.
 (aguardar)
 
+Endpoint: 35.198.30.62
+
 Acessar pelo terminal usando a linha de comando para conexão.
 
 Entrar na pasta onde está o arquivo .yml
@@ -101,11 +103,77 @@ Ainda não estão expostos. Para expor:
 Para ver se o serviço está pronto:
 > kubectl.exe get service
 NAME         TYPE           CLUSTER-IP    EXTERNAL-IP   PORT(S)        AGE
-app-html     LoadBalancer   10.64.13.55   35.198.5.16   80:31755/TCP   112s
+app-html     LoadBalancer   10.64.13.55   34.151.224.7  80:31755/TCP   112s
 kubernetes   ClusterIP      10.64.0.1     <none>        443/TCP        35m
 
 Testar o acesso pelo IP externo, no navegador.
 
- 
+============================
 
+ATUALIZANDO UM APLICATIVO
 
+Com a aplicação em produção.
+Abrir o VSCode.
+Abrir uma nova pasta app1.2
+Copiar o app-deployment.yml para dentro desta pasta.
+----
+Abrir a VM ubuntu2 no gcp
+Iniciar
+Abrir o Google Cloud SDK Shell
+>gcloud compute ssh szalbuque2@ubuntu2
+
+Modificar o index.html
+Criar outra imagem, com o index.html modificado, pode usar o mesmo dockerfile.
+> docker build . -t szalbuque/app-html:1.2
+> docker push szalbuque/app-html:1.2
+
+Parar a VM ubuntu2
+--------------
+
+Na pasta app1.2, editar o arquivo app-deployment.yml
+Trocar apenas:
+image: szalbuque/app-html:1.2
+
+> cd app1.2
+> kubectl.exe apply -f .\app-deployment.yml
+
+Testar o IP externo no navegador. Funcionou!
+
+================================
+
+CRIANDO UM LOAD BALANCER POR YAML
+
+Antes nós usamos o comando kubectl expose.
+Agora vamos fazer por um arquivo de configuração YAML.
+
+Primeiro para o serviço do load balancer que está ativo.
+
+> kubectl.exe delete service app-html
+
+-------------
+
+Abrir um novo arquivo na pasta app1.2: app-html-lb.yml
+
+apiVersion - regra:
+Pod: v1
+Deployment: apps/v1
+Service: v1
+
+--------------
+O arquivo abaixo irá criar somente o LoadBalancer. A aplicação já está rodando nos pods.
+---------------
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-html-lb
+spec:
+  selector:
+    app: app-html
+  ports:
+    - port: 80
+      targetPort: 80
+  type: LoadBalancer
+------------------
+> kubectl apply -f .\app-html-lb.yml
+> kubectl get service
+Aguardar a criação do IP externo e testar.
