@@ -92,4 +92,58 @@ Pegar a url para testar.
 
 EXECUTANDO APLICAÇÕES NO POD
 
+Executar uma operação dentro do container, num pod que está em execução, sem precisar parar o serviço.
 
+> kubectl.exe exec --stidin --tty myapp-php -- /bin/bash
+
+Vai abrir a linha de comando dentro do container, no WORKDIR.
+
+Posso instalar o nano e alterar o index.php, por exemplo.
+
+Para sair da linha de comando do container:
+> exit
+
+Porém, se eu deletar esse pod e subir novamente, ele vai voltar com as configurações e conteúdo original, sem a alteração que eu fiz.
+
+==========================
+
+DEPLOYMENT E SERVICE EM UM ÚNICO ARQUIVO YAML
+
+Separar com três hifens.
+Ver arquivo "C:\Users\silviaz\Documents\repositorios\DevopsDIO.me\kubernetes\app4\app-deployment.yml"
+
+============================
+
+ENCAMINHAMENTO DE PORTA
+
+Vamos subir um pod com container mysql. Ver arquivo \app4\mysql.yml
+
+O comando abaixo vai criar um serviço de acesso ao container mysql no localhost:3306
+
+> kubectl.exe port-forward pod/mysql-pod 3306:3306
+
+Usar um software de acesso ao mysql e conectar no localhost:3306
+
+Criar uma tabela com os comandos:
+CREATE TABLE mensagens (
+    id int,
+    nome varchar(50),
+    mensagem varchar(100)
+);
+
+Inserir um registro com:
+INSERT INTO mensagens (id,nome,mensagem) VALUES (1, 'Carlos da Silva', 'Hello World!!');
+
+Ver os registros com:
+SELECT * FROM mensagens;
+
+Porém, os dados não são persistentes. Se o pod cair, perco os dados.
+
+========================
+
+CRIANDO CONEXÃO COM UM BANCO DE DADOS
+
+Uma aplicação bem rudimentar.
+denilsonbonatti/k8s-database-exemplo
+
+Ver pasta app5.

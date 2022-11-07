@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql
+spec:
+  selector:
+    matchLabels:
+      app: mysql
+  template:
+    metadata:
+      labels:
+        app: mysql
+    spec:
+      containers:
+      - name: mysql
+        image: szalbuque/meubanco:1.0
+        # sempre verifica a versão mais atual da imagem
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 3306
+
+---
+# Este serviço será usado para fazer a conexão do backend com o banco de dados
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-connection
+spec:
+  ports:
+  - port: 3306
+  selector:
+    app: mysql
+  clusterIP: None

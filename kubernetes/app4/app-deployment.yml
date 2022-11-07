@@ -1,0 +1,27 @@
+# Especificações do pod
+apiVersion: v1
+kind: Pod
+metadata:
+  name: myapp-php
+spec:
+  containers:
+  - name: myapp-php 
+    image: szalbuque/myapp-php:1.0
+    ports:
+    - containerPort: 80
+
+---
+# Especificações do nodePort
+
+apiVersion: v1
+kind: Service 
+metadata:
+  name: myapp-php-service
+spec: 
+  type: NodePort
+  selector:
+    app: myapp-php 
+  ports:
+    - port: 80
+      targetPort: 80
+      nodePort: 30005
