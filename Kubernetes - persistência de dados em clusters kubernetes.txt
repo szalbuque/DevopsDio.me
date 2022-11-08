@@ -1,0 +1,7 @@
+PERSISTÊNCIA DE DADOS EM CLUSTERS KUBERNETES
+INTRODUÇÃO AO PV E PVC
+
+Dois tipos de APIs:
+- PersistentVolume: especifica onde está o volume
+- PersistentVolumeClaim: liga o volume ao deployment
+
