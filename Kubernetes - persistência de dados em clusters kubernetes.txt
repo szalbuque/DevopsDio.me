@@ -5,3 +5,99 @@ Dois tipos de APIs:
 - PersistentVolume: especifica onde está o volume
 - PersistentVolumeClaim: liga o volume ao deployment
 
+===============
+UTILIZANDO UM SERVIDOR NFS CLOUD FILESTORE
+
+Escalar horizontalmente e verticalmente usando uma mesma base de dados.
+Um servidor NFS com um IP externo e um nome de compartilhamento.
+
+Usando o GCP atenção ao local onde criou o cluster e a rede utilizada.
+
+O volume precisa estar acessível a esta rede.
+
+Pesquisar o serviço FILESTORE na gcp. Criar uma instância.
+Tipo: básico
+Tipo de armazenamento: HDD
+cAPACIDADE 1Tb
+Região: mesma do cluster
+Rede VPC: mesma do cluster
+Nome do compartilhamento: dados
+
+Depois de criar: copiar o endereço IP
+
+Usar o VisualCode. Criar um yml: http-nfs.yml
+
+# Persistent volume
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: fileserver-httpd
+spec:
+  capacity:
+     storage: 50Gi
+  accessModes:
+  - ReadWriteMany
+  nfs:
+    path: /dados
+    server: 10.14.147.218
+---
+# Persistent Volume Claim
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: fileserver-httpd
+spec:
+  accessModes:
+  - ReadWriteMany
+  storageClassName: ""
+  volumeName: fileserver-httpd
+  resources:
+    requests:
+      storage: 50Gi
+---
+# Deployment da aplicação
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: httpd
+spec:
+  replicas: 6
+  selector:
+    matchLabels:
+      app: httpd
+  template:
+    metadaata:
+      labels:
+        app: httpd
+    spec:
+      containers:
+      - image: httpd:latest
+        name: httpd
+        ports:
+        - containerPort: 80
+          name: httpd
+        volumeMounts:
+        - name: fileserver-httpd
+          mountPath: /usr/local/apache2/htdocs/
+      volumes:
+      - name: fileserver-httpd
+        persistentVolumeClaim:
+          claimName: fileserver-httpd
+
+---------------------------------
+No diretório onde está o yml:
+> kubectl.exe apply -f .\httpd-nfs.yml
+> kubectl.exe get pods -o wide
+
+Teste: criar um arquivo num dos pods e ver se ele replica para os outros pods.
+
+> Criar um index.html
+> kubectl.exe cp index.html nomedopod:/usr/local/apache2/htdocs/
+
+Abrir um pod que está em outro nó.
+> kubectl.exe exec --tty --stdin nomedopod -- /bin/bash
+> cd /usr/local/apache2/htdocs/
+> ls
+ver se o arquivo está lá
