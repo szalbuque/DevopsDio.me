@@ -67,3 +67,4 @@ NAME          STATUS   VOLUME       CAPACITY   ACCESS MODES   STORAGECLASS   AGE
 mysql-dados   Bound    fileserver   1T         RWX                           7s
 
 ---------------------------
+kubectl apply -f ./dbasedeploy.yml
