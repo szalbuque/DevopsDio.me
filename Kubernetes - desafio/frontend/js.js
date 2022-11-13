@@ -6,9 +6,10 @@ $("#button-blue").on("click", function() {
 
     $.ajax({
         //AQUI ENTRA O IP EXTERNO DO LOAD BALANCER//
-        url: "",
         
-        type: "post",
+        url: "http://34.72.148.211",
+        
+        type: 'post',
         data: {nome: txt_nome, comentario: txt_comentario, email: txt_email},
         beforeSend: function() {
         
@@ -16,7 +17,7 @@ $("#button-blue").on("click", function() {
 
         }
     }).done(function(e) {
-        alert("Dados Salvos");
+        alert("Dados Salvos em http://34.72.148.211");
     })
 
 });

@@ -1,0 +1,40 @@
+Aula: Persistência de dados em clusters kubernetes
+
+sessão: criando os arquivos de configuração do PV e PVC parte 2
+01:40 yml para criação do PersistentVolume (local)
+10:00 yml para criação do PersistentVolumeClaim (local)
+
+sessão: atribuindo a um deploy um PVC
+01:30 alteração no yml para usar um PVC
+
+sessão: Armazenamento persistente em nuvem
+Página de suporte sobre isso: cloud.google.com/kubernetes-engine/docs/concepts/persistent-volumes
+Provisionamento dinâmico de PersistentVolume. Só preciso configurar o PersistentVolumeClaim.
+
+
+
+yml http-nfs.yml  - usar um filestore como armazenamento persistente
+aula Persistência de ddos em clusters kubernetes
+utilizando um servidor NFS Cloud Filestore
+
+criação do persistent volume 5:51
+criação do pvc: 7:38
+
+
+
+
+Erro no deployment. 
+> kubectl describe pod mysql
+ State:          Waiting
+      Reason:       CrashLoopBackOff
+    Last State:     Terminated
+      Reason:       Error
+      Exit Code:    127
+
+INSERT INTO mensagens (id, nome, email, comentario)
+VALUES (1,"Silvia","silvia@teste.com","teste");
+
+docker run -dti --name dbase szalbuque/projetodatabase:1.0
+docker exec -ti dbase bash
+
+szalbuque/projeto-database:1.0
