@@ -1,0 +1,58 @@
+O que são Branches
+
+Problemas:
+- faço um commit para a branch main e há um bug... o usuário já vai ter contato com o bug enquanto eu ainda preciso corrigir o erro
+- começo a fazer uma alteração mas não há tempo de terminar antes de fazer o commit, ao final do dia, quando volto para trabalhar, queimou meu HD e perdi tudo porque não tinha feito o commit
+
+Por isso precisamos ter outras branches, além da main.
+
+=================
+
+Entendendo na prática sobre branches
+
+Main ou Master
+- pode ser escolhido nno momento da instalação do Git.
+
+O github já sugere o main.
+
+==================
+Guiando-se nas branches com a tag HEAD
+
+Uma tag é um nome para um ponto no tempo (um commit), a tag HEAD aponta sempre para o último commit.
+
+https://git-school.github.io/visualizing-git/
+
+==================
+Comando checkout e merge
+
+Criar uma nova branch e mover para ela:
+$ git checkout -b nova-funcionalidade
+
+Mover para outra branch:
+$ git checkout main
+
+Fundir as duas branches:
+Voltar para a branch main:
+$ git checkout main
+$ git merge nova-funcionalidade
+
+===================
+
+VISUALIZAÇÃO DE HISTÓRICO
+
+Comando STASH e seus subcomandos
+
+Em que branch estou? Que branches eu tenho? (a branch atual é marcada com asterisco)
+$ git branch
+
+Renomear a branch em que estou:
+$ git branch -m funcionalidade
+
+Renomear qualquer branch:
+$ git branch -m funcionalidade nova-funcionalidade
+
+Deletar uma branch:
+$ git branch -d nova-funcionalidade
+
+
+
