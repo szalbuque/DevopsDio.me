@@ -54,5 +54,75 @@ $ git branch -m funcionalidade nova-funcionalidade
 Deletar uma branch:
 $ git branch -d nova-funcionalidade
 
+------------------
+Quando trocar de uma branch para outra, tem que ter cuidado para não levar arquivos da outra branch.
+Se usar o git checkout isso pode acontecer.
+Precisa usar o STASH.
+O Stash é como uma caixinha.
+$ git stash save "guardando arquivos para iniciar alterações" (pega tudo que está o stage e guarda na caixinha)
+$ git status (não tem mais nada lá)
+Fica seguro para não carregar o contexto do trabalho que estava fazendo antes para a branch nova.
+$ git stash pop 1 (volta o stash 1 para a área stage)
+$ git stash clear (limpa o stash)
+=====================
 
+COMANDO GIT LOG
+
+Histórico: registro cronológico de commits.
+
+Entrar no repositório com o git bash e digitar:
+git log
+Teclar q para sair
+
+Ver o histórico de uma pasta específica:
+git log nomedapasta
+
+Ver o histórico de um arquivo específico:
+git log nomedoarquivo
+
+===================
+SUBCOMANDOS ESPECÍFICOS COM O GIT LOG
+
+$ git log --oneline (mostra de forma resumida o histórico)
+
+Visualizar as branches de forma visual:
+
+$ git log --graph
+
+$ gitk (ferramenta gráfica)
+
+====================
+
+CONCEITOS INICIAIS SOBRE REVERTER COMMITS
+
+Usar o VSCode
+
+Posso reverter usando o hash do commit ou pela HEAD.
+
+Criar um repositório local. Abrir pelo VSCode.
+O VSCode adiciona a letra U quando o arquivo está untracked.
+A letra A quando o arquivo foi adicionado ao stage.
+
+git reset shadocommit (volta para o estado em que estava nesse commit)
+
+git reset HEAD~1 (volta para o estado do commit anterior ao da HEAD)
+
+git reset HEAD~2 (volta para o estado do commit que está dois passos atrás do HEAD)
+
+-- soft (volta ao estado em que foi dado apenas o git add - staging area)
+-- mixed (volta ao estado anterior ao git add - working area)
+
+Cuidado ao usar:
+-- hard (simplesmente desfaz todas as alterações que tinham entrado naquele commit, inclusive deletando arquivos que tinham sido criados)
+
+====================
+
+GIT REVERT (commit invertido)
+
+- cria um commit desfazendo as alterações do commit escolhido
+
+$ git revert HEAD~1
+=======================
+
+ESTRUTURANDO COMMITS
 
