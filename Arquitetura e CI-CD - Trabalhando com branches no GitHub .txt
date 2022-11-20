@@ -126,3 +126,77 @@ $ git revert HEAD~1
 
 ESTRUTURANDO COMMITS
 
+- melhor legibilidade do histórico
+- amigável para novos devs
+- amigável ao versionamento semântico
+
+COMMITS ATÔMICOS
+- o commit inclui todas as tarefas realizadas para um objetivo conciso
+
+Português x Inglês
+- depende do contexto
+
+Estrutura:
+- Assunto
+- Corpo
+- Rodapé
+
+Assunto: 
+- curto e compreensível
+- até 50 caracteres
+- começar com letra maiúscula
+- não terminar em ponto
+- escrito de forma imperativa
+-- Pense assim: If applied, this commit will add payment integration
+-- em inglês: add a feature; modify an existing feature; remove a feature
+-- Pense assim: se aceito, esse commit adiciona método de pagamento
+-- em português: adiciona a funcionalidade x; modifica uma funcionalidade existente; remove a funcionalidade y
+
+Corpo:
+- adicione detalhes ao commit
+- tente quebrar a linha em 75 caracteres
+- identifique sua audiência
+- explique tudo (não assuma que a pessoa tem conhecimento prévio, nem que o código é autoexplicativo)
+- use markdown (títulos destacados, bullet topics, etc.)
+
+Rodapé: (opcional)
+- referencie assuntos relacionados (issues)
+
+No github:
+- issues: questões ou problemas encontrados;
+
+O editor padrão do git bash é o vim. Se eu digitar apenas git commit (sem o -m) ele vai abrir o editor padrão.
+
+Para trocar o editor padrão (nesse caso é o VSCode):
+$ git config --global core.editor "code --wait"
+
+Para remover essa configuração:
+$ git config --global --unset core.editor
+
+==========================
+
+COMMITS SEMÂNTICOS
+
+SEMANTIC VERSIONING (http://semver.org)
+
+Exemplo: 3.2.7
+3 -> major (funcionalidade que quebra compatibilidade, grande diferença)
+2 -> minor (implementa funcionalidade sem quebrar compatibilidade)
+7 -> patch (correções de bug, pequenas alterações)
+
+Conventional Commits (http://www.conventionalcommits.org) (LER ESSA PÁGINA!)
+--------------------
+Define um conjunto de regras para criar um histórico de commit explícito.
+Facilita a criação de ferramentas automatizadas.
+Tipos de commit: fix (patch); feat (minor); breaking change (major)
+
+Facilita o uso de ferramentas de versionamento que vai incrementar automaticamente o número de versão.
+
+As ferramentas podem gerar também LOGS automáticos.
+
+====================
+
+
+
+
+

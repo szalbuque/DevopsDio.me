@@ -1,0 +1,21 @@
+Trabalhando com Git e GitLab na prática
+
+Merge e rebase
+
+Estou numa branch feature2 mas houve alteração no main.
+Quero atualizar a branch pegando a alteração do main.
+Vou para a branch feature2,
+$ git merge main
+
+Ele vai abrir um arquivo para colocar a mensagem do merge.
+
+O rebase não faz outro commit, ele refaz a árvore de commits do branch.
+Vou para o branch
+$ git rebase main
+(tomar cuidado com o rebase se já enviou isso para o git remoto)
+
+=================
+GITLAB
+
+Interface da plataforma e criação de projeto
+

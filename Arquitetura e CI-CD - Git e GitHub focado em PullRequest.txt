@@ -1,0 +1,44 @@
+Ferramentas de colaboração
+
+- Fork: o repositório fica sempre ligado ao repositório de origem.
+- Clone: baixar o repositório para a máquina local
+- Branch: criar uma branch para trabalhar no código
+- Fazer o commit das alterações.
+- Push: fazer o push da nova branch.
+- O próprio github já sugere a url para fazer o pull request
+- Explicar os detalhes do pull request
+- O dono do repositório original pode fazer um merge
+
+======================
+Permissões
+
+- No repositório > settings > manage access
+- Invite a collaborator
+- Vai chegar um e-mail para o convidado
+- Ele aceita
+- O colaborador vai poder fazer push diretamente no repositório
+======================
+
+Organizações e times
+
+- organização criada: aprenda-git
+
+Arquivo pull_request_template.md é template para colaboradores fazerem pull request.
+
+====================
+Issues
+settings > issues > set up templates
+
+====================
+Configurando Aliases
+
+apelidos para os comandos mais usados
+exemplo git status:
+
+$ git config --global alias.s status
+
+para remover:
+
+$ git config --global --unset alias.s
+
+
