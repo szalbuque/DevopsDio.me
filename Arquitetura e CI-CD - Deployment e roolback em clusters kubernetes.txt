@@ -1,0 +1,55 @@
+Arquiteturas de Aplicações e CI/CD na prática
+Deployment e roolback em clusters kubernetes
+
+> kubectl rollout history deployment httpd
+
+> kubectl rollout undo deployment httpd --to-revision=1
+
+===================
+ORGANIZANDO O HISTÓRICO DE DEPLOYMENT
+
+Usar o nome do arquivo de deploy que reflita a versão. Exemplo:
+> app-html1.0.yml
+> kubectl apply -f .\app-html1.0.yml
+> kubectl get deploy
+> kubectl rollout history deployment html-deployment
+  naõ mostra nada porque não usamos o history
+
+> kubectl delete deploy html-deployment
+
+> kubectl apply -f .\app-html1.0.yml --record
+
+==================
+SECRETS (depois de criar, deletar ou colocar no gitignore)
+
+apiVersion: v1
+kind: Secret
+metadata:
+  name: my-secret
+type: Opaque
+data:
+  ROOT_PASSWORD: Senha123
+
+> kubectl apply -f .\secrets.yml
+> kubectl get secrets
+
+-----------------
+No arquivo de geração dos pods, uso o secrets
+
+(...)
+spec:
+  containers:
+    - name: mysql
+      image: mysql:5.7
+        ports:
+          - containerPort: 3306
+        env:
+          - name: MYSQL_ROOT_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: my-secret
+                key: ROOT_PASSWORD
+(...)
+-------------------------
+
+

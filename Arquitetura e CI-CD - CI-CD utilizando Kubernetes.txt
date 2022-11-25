@@ -1,0 +1,71 @@
+ARQUITETURAS DE APLICAÇÕES E CI/CD NA PRÁTICA
+
+CI-CD UTILIZANDO KUBERNETES
+
+-----------------
+
+A implantação (Deploy) envolve mover o software de um ambiente controlado para outro. 
+Um ambiente (teste, produção) é um subconjunto de infraestrutura de TI usado para uma finalidade específica.
+
+-----------------------
+INTEGRAÇÃO CONTÍNUA (CI) - vamos usar o GitLab
+
+Investigar erros mais rapidamente.
+
+A integração contínua é uma prática de desenvolvimento de software em que os desenvolvedores, com frequência, juntam suas alterações de código em um repositório central. 
+Depois disso, criações e testes são executados. 
+Os principais objetivos da integração contínua são encontrar e investigar erros mais rapidamente, melhorar a qualidade do software e reduzir o tempo necessário para validar e lançar novas atualizações de software.
+
+--------------------------
+
+Entrega contínua (CD)
+
+A entrega contínua é uma prática de desenvolvimento de software em que alterações de código são criadas, testadas e preparadas automaticamente para liberação para produção. 
+Ela expande com base na integração contínua, pela implantação de todas as alterações de código em um ambiente de teste e/ou ambiente de produção, após o estágio de criação. 
+Quando a integração contínua for implementada adequadamente, os desenvolvedores sempre terão um artefato de criação pronto para ser implantado, e que passou por um processo de teste padronizado.
+
+----------------------------
+
+No gitlab, para poder acessar remotamente um repositório via usuário e senha, precisamos criar um Access Token, indo em User Settings > Access Tokens.
+
+---------------------------
+
+CRIANDO UMA PIPELINE DE CRIAÇÃO DE IMAGENS
+
++ APP
++- dockerfile (para gerar imagem apache com minha app)
++- index.html
++ .gitlab-ci.yml
+
+Toda vez que o dev alterar o código da aplicação, quero que a imagem seja gerada automaticamente e seja gerado um container a partir dela, automaticamente.
+
+O arquivo .gitlab-ci.yml vai configurar os estágios. Usa o recurso docker-in-docker. Vai subir uma imagem do docker no gitlab pra gerar a imagem da aplicação.
+
+stages:
+  - build
+
+build_images:
+  stage: build
+  image: docker:20.10.16
+
+  services:
+    - docker: 20.10.16-dind
+
+  variables:
+    DOCKER_TLS_CERTDIR: "/certs"
+
+  before_script:
+    - docker login -u $REGISTRY_USER -p $REGISTRY_PASS
+
+  script:
+    - docker build -t nomeusuario/app-cicd-dio:1.0 app/.
+    - docker push nomeusuario/app-cicd-dio:1.0
+    
+
+
+
+
+(10:12)
+
+
+
